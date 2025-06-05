@@ -8,7 +8,7 @@ import "./globals.css";
 
 // Components
 import ErrorBoundary from '@/components/common/ErrorBoundary';
-// import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loading';
 
 // Dynamic imports for layout components
 const Header = dynamic(() => import('@/components/layout/Header'), {
@@ -32,11 +32,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://barasakti.com'),
   title: {
-    default: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
+    default: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
     template: '%s | Barasakti',
   },
-  description: 'Barasakti menyediakan layanan konstruksi, renovasi, dan konsultasi bangunan berkualitas tinggi dengan pengalaman lebih dari 10 tahun.',
-  keywords: ['konstruksi', 'renovasi', 'bangunan', 'konsultasi', 'barasakti', 'jakarta', 'indonesia'],
+  description: 'Barasakti adalah produsen arang briket premium untuk BBQ, shisha, hookah, dan keperluan industri. Kualitas terjamin dengan pengalaman lebih dari 10 tahun.',
+  keywords: ['arang briket', 'charcoal', 'BBQ', 'shisha', 'hookah', 'briket premium', 'barasakti', 'indonesia', 'coconut charcoal'],
   authors: [{ name: 'Barasakti Team' }],
   creator: 'Barasakti',
   publisher: 'Barasakti',
@@ -50,21 +50,21 @@ export const metadata: Metadata = {
     locale: 'id_ID',
     url: 'https://barasakti.com',
     siteName: 'Barasakti',
-    title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
-    description: 'Layanan konstruksi dan renovasi berkualitas tinggi untuk proyek impian Anda.',
+    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
+    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga kompetitif.',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Barasakti - Konstruksi & Bangunan',
+        alt: 'Barasakti - Arang Briket Premium',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
-    description: 'Layanan konstruksi dan renovasi berkualitas tinggi untuk proyek impian Anda.',
+    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
+    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga kompetitif.',
     images: ['/images/twitter-image.jpg'],
   },
   robots: {

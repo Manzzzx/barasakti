@@ -9,35 +9,35 @@ import Loading from '@/components/common/Loading';
 
 // Dynamic imports for performance
 const ProductSection = dynamic(() => import('@/components/sections/ProductSection'), {
-  loading: () => <Loading variant="skeleton" />,
+  loading: () => <Loading type="skeleton" />,
   ssr: true,
 });
 
 const AboutSection = dynamic(() => import('@/components/sections/AboutSection'), {
-  loading: () => <Loading variant="skeleton" />,
+  loading: () => <Loading type="skeleton" />,
   ssr: true,
 });
 
 const ContactSection = dynamic(() => import('@/components/sections/ContactSection'), {
-  loading: () => <Loading variant="skeleton" />,
+  loading: () => <Loading type="skeleton" />,
   ssr: true,
 });
 
 // SEO Metadata
 export const metadata: Metadata = {
-  title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
-  description: 'Barasakti menyediakan layanan konstruksi, renovasi, dan konsultasi bangunan berkualitas tinggi. Hubungi kami untuk proyek impian Anda.',
-  keywords: 'konstruksi, renovasi, bangunan, konsultasi, barasakti',
+  title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
+  description: 'Barasakti menyediakan arang briket premium untuk BBQ, shisha, dan keperluan industri. Kualitas terbaik dengan harga kompetitif.',
+  keywords: 'arang briket, charcoal, BBQ, shisha, hookah, briket premium, barasakti',
   openGraph: {
-    title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
-    description: 'Layanan konstruksi dan renovasi berkualitas tinggi untuk proyek impian Anda.',
+    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
+    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga terbaik.',
     type: 'website',
     locale: 'id_ID',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
-    description: 'Layanan konstruksi dan renovasi berkualitas tinggi untuk proyek impian Anda.',
+    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
+    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga terbaik.',
   },
   robots: {
     index: true,
@@ -56,8 +56,8 @@ export default function HomePage() {
 
         {/* Product Section - Lazy loaded */}
         <section id="produk" className="relative">
-          <Suspense fallback={<Loading variant="skeleton" />}>
-            <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat produk</div>}>
+          <Suspense fallback={<Loading type="skeleton" />}>
+            <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat produk arang briket</div>}>
               <ProductSection />
             </ErrorBoundary>
           </Suspense>
@@ -65,7 +65,7 @@ export default function HomePage() {
 
         {/* About Section - Lazy loaded */}
         <section id="tentang" className="relative">
-          <Suspense fallback={<Loading variant="skeleton" />}>
+          <Suspense fallback={<Loading type="skeleton" />}>
             <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat informasi perusahaan</div>}>
               <AboutSection />
             </ErrorBoundary>
@@ -74,7 +74,7 @@ export default function HomePage() {
 
         {/* Contact Section - Lazy loaded */}
         <section id="kontak" className="relative">
-          <Suspense fallback={<Loading variant="skeleton" />}>
+          <Suspense fallback={<Loading type="skeleton" />}>
             <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat kontak</div>}>
               <ContactSection />
             </ErrorBoundary>

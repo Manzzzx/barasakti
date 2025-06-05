@@ -12,6 +12,8 @@ import { CompanyInfo, NavigationItem, SocialLink } from '@/types';
 
 // Company Information
 export const COMPANY_INFO: CompanyInfo = {
+  email: 'info@barasakti.com',
+  phone: '+62 831-9244-3183',
   name: 'Bara Sakti',
   tagline: 'Briket Kelapa Premium Terpercaya',
   description: 'Bara Sakti adalah produsen briket kelapa premium yang berkomitmen menghadirkan produk berkualitas tinggi untuk kebutuhan BBQ, restoran, dan industri. Dibuat dari 100% tempurung kelapa pilihan.',
