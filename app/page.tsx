@@ -1,103 +1,86 @@
-import Image from "next/image";
+import { Suspense } from 'react';
+import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 
-export default function Home() {
+// Components
+import HeroSection from '@/components/sections/HeroSection';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import Loading from '@/components/common/Loading';
+
+// Dynamic imports for performance
+const ProductSection = dynamic(() => import('@/components/sections/ProductSection'), {
+  loading: () => <Loading variant="skeleton" />,
+  ssr: true,
+});
+
+const AboutSection = dynamic(() => import('@/components/sections/AboutSection'), {
+  loading: () => <Loading variant="skeleton" />,
+  ssr: true,
+});
+
+const ContactSection = dynamic(() => import('@/components/sections/ContactSection'), {
+  loading: () => <Loading variant="skeleton" />,
+  ssr: true,
+});
+
+// SEO Metadata
+export const metadata: Metadata = {
+  title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
+  description: 'Barasakti menyediakan layanan konstruksi, renovasi, dan konsultasi bangunan berkualitas tinggi. Hubungi kami untuk proyek impian Anda.',
+  keywords: 'konstruksi, renovasi, bangunan, konsultasi, barasakti',
+  openGraph: {
+    title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
+    description: 'Layanan konstruksi dan renovasi berkualitas tinggi untuk proyek impian Anda.',
+    type: 'website',
+    locale: 'id_ID',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Barasakti - Solusi Konstruksi & Bangunan Terpercaya',
+    description: 'Layanan konstruksi dan renovasi berkualitas tinggi untuk proyek impian Anda.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <ErrorBoundary>
+      <main className="min-h-screen">
+        {/* Hero Section - Always visible */}
+        <section id="hero" className="relative">
+          <HeroSection />
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        {/* Product Section - Lazy loaded */}
+        <section id="produk" className="relative">
+          <Suspense fallback={<Loading variant="skeleton" />}>
+            <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat produk</div>}>
+              <ProductSection />
+            </ErrorBoundary>
+          </Suspense>
+        </section>
+
+        {/* About Section - Lazy loaded */}
+        <section id="tentang" className="relative">
+          <Suspense fallback={<Loading variant="skeleton" />}>
+            <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat informasi perusahaan</div>}>
+              <AboutSection />
+            </ErrorBoundary>
+          </Suspense>
+        </section>
+
+        {/* Contact Section - Lazy loaded */}
+        <section id="kontak" className="relative">
+          <Suspense fallback={<Loading variant="skeleton" />}>
+            <ErrorBoundary fallback={<div className="py-20 text-center text-gray-500">Gagal memuat kontak</div>}>
+              <ContactSection />
+            </ErrorBoundary>
+          </Suspense>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </ErrorBoundary>
   );
 }
