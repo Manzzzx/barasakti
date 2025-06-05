@@ -142,8 +142,8 @@ export const products: Product[] = [
       metaDescription: 'Briket kelapa restaurant grade Bara Sakti 10kg. Kualitas profesional untuk restoran, warung, catering. Panas stabil 6 jam, abu minimal, food grade certified.',
       keywords: ['briket restoran', 'briket komersial', 'arang restoran', 'briket food grade', 'bara sakti restaurant']
     },
-    createdAt: new Date('2024-01-10'),
-    updatedAt: new Date('2024-01-18'),
+    createdAt: new Date('2025-04-10'),
+    updatedAt: new Date('2025-05-18'),
     featured: true,
     bestSeller: false
   },

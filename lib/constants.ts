@@ -34,28 +34,10 @@ export const COMPANY_INFO: CompanyInfo = {
       icon: 'Instagram',
       label: 'Follow us on Instagram'
     },
-    {
-      platform: 'Facebook',
-      url: 'https://facebook.com/barasakti',
-      icon: 'Facebook',
-      label: 'Like our Facebook page'
-    },
-    {
-      platform: 'YouTube',
-      url: 'https://youtube.com/@barasakti',
-      icon: 'Youtube',
-      label: 'Subscribe to our channel'
-    },
-    {
-      platform: 'TikTok',
-      url: 'https://tiktok.com/@barasakti',
-      icon: 'Music',
-      label: 'Follow us on TikTok'
-    }
   ],
   businessHours: {
-    weekdays: 'Senin - Jumat: 08:00 - 17:00 WIB',
-    weekend: 'Sabtu: 08:00 - 15:00 WIB (Minggu Tutup)'
+    weekdays: 'Senin - Jumat: 09:00 - 17:00 WIB',
+    weekend: 'Sabtu: 09:00 - 15:00 WIB (Minggu Tutup)'
   }
 };
 
@@ -162,6 +144,15 @@ export const CONTACT_PREFERENCES = [
   { value: 'email', label: 'Email', icon: 'Mail' }
 ] as const;
 
+export const SOSIAL_LINKS: SocialLink[] = [
+  {
+    platform: 'Instagram',
+    url: 'https://instagram.com/barasakti',
+    icon: 'Instagram',
+    label: 'Follow us on Instagram'
+  },
+];
+
 // Animation Variants untuk Framer Motion
 export const ANIMATION_VARIANTS = {
   fadeIn: {
@@ -196,4 +187,120 @@ export const BREAKPOINTS = {
   lg: '1024px',
   xl: '1280px',
   '2xl': '1536px'
+} as const;
+
+// Image Optimization Configuration
+export const IMAGE_CONFIG = {
+  // Next.js Image component settings
+  quality: 85,
+  formats: ['webp', 'avif'] as const,
+  sizes: {
+    thumbnail: { width: 150, height: 150 },
+    card: { width: 300, height: 200 },
+    hero: { width: 1920, height: 1080 },
+    product: { width: 800, height: 600 },
+    gallery: { width: 600, height: 400 },
+    avatar: { width: 100, height: 100 }
+  },
+  // Responsive breakpoints untuk srcSet
+  breakpoints: {
+    mobile: '(max-width: 768px)',
+    tablet: '(max-width: 1024px)',
+    desktop: '(min-width: 1025px)'
+  },
+  // Lazy loading configuration
+  lazyLoading: {
+    rootMargin: '50px',
+    threshold: 0.1,
+    enableBlur: true,
+    blurDataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=='
+  }
+} as const;
+
+// Performance Configuration
+export const PERFORMANCE_CONFIG = {
+  // Lazy loading settings
+  lazyLoading: {
+    // Intersection Observer options
+    intersectionOptions: {
+      rootMargin: '100px 0px',
+      threshold: [0, 0.25, 0.5, 0.75, 1]
+    },
+    // Components to lazy load
+    components: {
+      productGallery: true,
+      blogCards: true,
+      testimonials: true,
+      contactMap: true
+    }
+  },
+  // Preloading configuration
+  preload: {
+    criticalImages: [
+      '/images/hero-bg.jpg',
+      '/images/logo.png'
+    ],
+    fonts: [
+      'Inter-Regular.woff2',
+      'Inter-Medium.woff2',
+      'Inter-SemiBold.woff2'
+    ]
+  },
+  // Bundle optimization
+  bundleOptimization: {
+    chunkSize: {
+      maxInitialRequests: 3,
+      maxAsyncRequests: 5,
+      minChunkSize: 20000
+    },
+    // Code splitting points
+    splitPoints: [
+      'vendor',
+      'common',
+      'pages'
+    ]
+  }
+} as const;
+
+// Image Paths Configuration
+export const IMAGE_PATHS = {
+  products: '/images/products',
+  gallery: '/images/gallery',
+  blog: '/images/blog',
+  icons: '/icons',
+  placeholders: {
+    product: '/images/placeholders/product-placeholder.jpg',
+    avatar: '/images/placeholders/avatar-placeholder.jpg',
+    blog: '/images/placeholders/blog-placeholder.jpg'
+  }
+} as const;
+
+// Loading States Configuration
+export const LOADING_CONFIG = {
+  skeletons: {
+    productCard: {
+      height: '300px',
+      animation: 'pulse'
+    },
+    blogCard: {
+      height: '250px',
+      animation: 'wave'
+    },
+    hero: {
+      height: '500px',
+      animation: 'pulse'
+    }
+  },
+  spinners: {
+    size: {
+      small: '16px',
+      medium: '24px',
+      large: '32px'
+    },
+    colors: {
+      primary: 'bara-500',
+      secondary: 'eco-500',
+      accent: 'premium-600'
+    }
+  }
 } as const;
