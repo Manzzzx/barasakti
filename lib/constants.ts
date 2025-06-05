@@ -14,17 +14,17 @@ import { CompanyInfo, NavigationItem, SocialLink } from '@/types';
 export const COMPANY_INFO: CompanyInfo = {
   name: 'Bara Sakti',
   tagline: 'Briket Kelapa Premium Terpercaya',
-  description: 'Bara Sakti adalah produsen briket kelapa premium yang berkomitmen menghadirkan produk berkualitas tinggi untuk kebutuhan BBQ, restoran, dan industri. Dibuat dari 100% tempurung kelapa pilihan dengan teknologi modern.',
+  description: 'Bara Sakti adalah produsen briket kelapa premium yang berkomitmen menghadirkan produk berkualitas tinggi untuk kebutuhan BBQ, restoran, dan industri. Dibuat dari 100% tempurung kelapa pilihan.',
   address: {
-    street: 'Jl. Industri Briket No. 123',
-    city: 'Yogyakarta',
-    province: 'Daerah Istimewa Yogyakarta',
-    postalCode: '55281',
+    street: 'Jl. Imam Bonjol No.35, Canting, Klampok, Kec. Wanasari',
+    city: 'Brebes',
+    province: 'Jawa Tengah',
+    postalCode: '52252',
     country: 'Indonesia'
   },
   contact: {
-    phone: '+62 274 123 4567',
-    whatsapp: '+62 812 3456 7890',
+    phone: '+62 831-9244-3183',
+    whatsapp: '+62 831-9244-3183',
     email: 'info@barasakti.com'
   },
   social: [
