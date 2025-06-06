@@ -41,9 +41,9 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
       {
         title: 'Produk',
         links: [
-          { label: 'BBQ Premium', href: '/produk/bbq-premium' },
-          { label: 'Restaurant Grade', href: '/produk/restaurant-grade' },
-          { label: 'Bulk Industrial', href: '/produk/bulk-industrial' },
+          { label: 'BBQ Rumahan', href: '/produk/bbq-rumahan' },
+          { label: 'Shisha & Hookah', href: '/produk/shisha-hookah' },
+          { label: 'Warung & Usaha Kecil', href: '/produk/warung-usaha' },
           { label: 'Semua Produk', href: '/produk' }
         ]
       },
@@ -163,7 +163,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
 
             {/* Description */}
             <p className="text-gray-300 leading-relaxed">
-              {safeCompanyInfo.description || 'Produsen briket kelapa premium terpercaya dengan kualitas terbaik untuk kebutuhan BBQ, restoran, dan industri.'}
+              {safeCompanyInfo.description || 'Usaha di Brebes yang memproduksi briket kelapa berkualitas untuk kebutuhan BBQ rumahan, shisha, dan warung makan dengan harga terjangkau.'}
             </p>
 
             {/* Contact Info */}
@@ -269,10 +269,10 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
             <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} {safeCompanyInfo.name}. Semua hak dilindungi.
+              © {new Date().getFullYear()} {safeCompanyInfo.name}. All rights reserved.
             </p>
             <p className="text-xs text-gray-500 mt-1">
-              Dibuat dengan ❤️ untuk masa depan yang lebih hijau
+              Created By ❤️ untuk masa depan yang lebih hijau
             </p>
           </div>
           

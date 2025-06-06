@@ -39,23 +39,23 @@ const AboutSection: React.FC<AboutSectionProps> = ({
   const stats = [
     {
       icon: Users,
-      value: 1000,
+      value: 300,
       suffix: '+',
-      label: 'Pelanggan Puas',
+      label: 'Pelanggan Setia',
       color: 'text-bara-600'
     },
     {
       icon: Award,
-      value: 5,
+      value: 6,
       suffix: '',
       label: 'Tahun Pengalaman',
       color: 'text-eco-600'
     },
     {
       icon: Target,
-      value: 99,
+      value: 95,
       suffix: '%',
-      label: 'Tingkat Kepuasan',
+      label: 'Kepuasan Pelanggan',
       color: 'text-premium-600'
     },
     {
@@ -75,15 +75,15 @@ const AboutSection: React.FC<AboutSectionProps> = ({
     },
     {
       title: 'Ramah Lingkungan',
-      description: 'Mendukung sustainability dengan memanfaatkan limbah kelapa menjadi produk bernilai'
+      description: 'Memanfaatkan limbah tempurung kelapa menjadi produk bernilai'
     },
     {
-      title: 'Pelayanan Terbaik',
-      description: 'Komitmen memberikan pelayanan terbaik dari konsultasi hingga pengiriman'
+      title: 'Pelayanan Ramah',
+      description: 'Melayani dengan hati dan memberikan konsultasi terbaik'
     },
     {
-      title: 'Harga Kompetitif',
-      description: 'Menawarkan harga terbaik tanpa mengorbankan kualitas produk'
+      title: 'Harga Terjangkau',
+      description: 'Menawarkan harga yang bersahabat untuk semua kalangan'
     }
   ];
 
@@ -122,16 +122,17 @@ const AboutSection: React.FC<AboutSectionProps> = ({
           >
             <div>
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                Produsen Briket Kelapa Premium Terpercaya
+                Usaha Arang Briket Terpercaya
               </h3>
               <div className="prose prose-lg text-gray-600">
                 <p className="mb-4">
                   {COMPANY_INFO.description}
                 </p>
                 <p>
-                  Dengan pengalaman bertahun-tahun di industri briket kelapa, kami berkomitmen 
-                  menghadirkan produk berkualitas tinggi yang memenuhi standar internasional 
-                  untuk kebutuhan BBQ, restoran, dan industri.
+                  Dimulai sebagai usaha kecil di Brebes, kami berkomitmen 
+                  menghadirkan arang briket berkualitas dengan harga terjangkau. 
+                  Setiap produk dibuat dengan penuh perhatian untuk memastikan 
+                  kepuasan pelanggan.
                 </p>
               </div>
             </div>
@@ -217,7 +218,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
             </div>
 
             {/* Floating Stats Card */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -235,7 +236,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                   <p className="text-sm text-gray-600">Tahun Pengalaman</p>
                 </div>
               </div>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
 

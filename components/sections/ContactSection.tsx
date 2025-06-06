@@ -139,10 +139,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({
             Hubungi Kami
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Mari Berkolaborasi
+            Hubungi Kami
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Siap membantu kebutuhan briket kelapa premium Anda. Hubungi kami untuk konsultasi gratis!
+            Siap melayani kebutuhan briket kelapa berkualitas untuk rumah, warung, dan usaha kecil Anda. Konsultasi gratis!
           </p>
         </motion.div>
 
@@ -224,14 +224,14 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                 variants={ANIMATION_VARIANTS.fadeIn}
                 className="pt-6"
               >
-                <h3 className="font-semibold text-gray-900 mb-4">Aksi Cepat</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Hubungi Langsung</h3>
                 <div className="flex flex-wrap gap-3">
                   <Button
                     asChild
                     className="bg-green-600 hover:bg-green-700 text-white"
                   >
                     <a
-                      href={`https://wa.me/${COMPANY_INFO?.contact?.whatsapp?.replace(/\D/g, '') || ''}`}
+                      href={`https://wa.me/6281234567890?text=Halo%20Bara%20Sakti,%20saya%20tertarik%20dengan%20produk%20briket%20kelapa%20Anda`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -244,7 +244,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                     className="border-bara-500 text-bara-500 hover:bg-bara-50"
                   >
                     <a href={`tel:${COMPANY_INFO?.contact?.phone?.replace(/\s+/g, '') || ''}`}>
-                      Telepon Sekarang
+                      Telepon Langsung
                     </a>
                   </Button>
                 </div>
@@ -263,7 +263,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               <Card className="shadow-xl">
                 <CardHeader>
                   <CardTitle className="text-2xl font-bold text-gray-900">
-                    Kirim Pesan
+                    Pesan Sekarang
                   </CardTitle>
                   <p className="text-gray-600">
                     Isi form di bawah ini dan kami akan segera menghubungi Anda.

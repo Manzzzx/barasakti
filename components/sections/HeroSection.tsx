@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, Shield, Truck } from 'lucide-react';
+import { ArrowRight, Star, Shield, Truck, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { COMPANY_INFO, ANIMATION_VARIANTS, IMAGE_CONFIG } from '@/lib/constants';
@@ -17,11 +17,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
   const features = [
     {
       icon: Star,
-      text: 'Kualitas Premium'
+      text: 'Kualitas Terjamin'
     },
     {
       icon: Shield,
-      text: '100% Natural'
+      text: '100% Alami'
     },
     {
       icon: Truck,
@@ -48,7 +48,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20">
+      <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-4xl">
           {/* Badge */}
           <motion.div
@@ -58,7 +58,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
             className="mb-6"
           >
             <Badge className="bg-bara-500/20 text-bara-100 border-bara-400/30 px-4 py-2 text-sm font-medium">
-              🔥 Briket Kelapa Premium #1 di Indonesia
+              ♻️ Ramah Lingkungan
             </Badge>
           </motion.div>
 
@@ -77,7 +77,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
           >
             Bara Sakti
             <span className="block text-bara-300">
-              Briket Kelapa Premium
+              Arang Briket Berkualitas
             </span>
           </motion.h1>
 
@@ -158,8 +158,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
               size="lg"
               className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur-sm"
             >
-              <Link href="/kontak">
-                Konsultasi Gratis
+              <Link href={`https://wa.me/${COMPANY_INFO.contact.whatsapp.replace(/[^0-9]/g, '')}`}>
+                <Phone className="mr-2 w-5 h-5" />
+                Hubungi Kami
               </Link>
             </Button>
           </motion.div>

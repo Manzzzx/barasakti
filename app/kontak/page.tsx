@@ -13,7 +13,7 @@ import { COMPANY_INFO } from '@/lib/constants';
 
 // Dynamic imports
 const ContactForm = dynamic(() => import('@/components/features/ContactForm'), {
-  loading: () => <Loading type="skeleton" />,
+  loading: () => <Loading variant="skeleton" />,
 });
 
 const FadeIn = dynamic(() => import('@/components/animations/FadeIn'), {
@@ -82,20 +82,24 @@ const businessHours = [
 
 const faqs = [
   {
-    question: 'Apa minimum order untuk pembelian?',
-    answer: 'Minimum order kami adalah 1 kg untuk pembelian retail dan 5 ton untuk pembelian grosir.',
+    question: 'Berapa minimum order untuk pembelian?',
+    answer: 'Minimum order kami adalah 5 kg untuk pembelian retail dan 100 kg untuk pembelian grosir.',
   },
   {
     question: 'Berapa lama waktu pengiriman?',
-    answer: 'Untuk wilayah Brebes 1-2 hari kerja, luar Brebes 3-7 hari kerja tergantung lokasi.',
+    answer: 'Untuk wilayah Brebes 1-2 hari, sekitar Brebes 2-4 hari tergantung lokasi dan ketersediaan kurir.',
+  },
+  {
+    question: 'Apakah bisa COD (bayar di tempat)?',
+    answer: 'Ya, untuk wilayah Brebes dan sekitarnya kami melayani COD dengan minimal pembelian 20 kg.',
+  },
+  {
+    question: 'Bagaimana cara menjadi reseller?',
+    answer: 'Silakan hubungi kami langsung via WhatsApp untuk informasi program reseller dan harga khusus.',
   },
   {
     question: 'Apakah ada garansi kualitas?',
-    answer: 'Ya, kami memberikan garansi kualitas 100%. Jika produk tidak sesuai standar, kami akan mengganti.',
-  },
-  {
-    question: 'Bagaimana cara menjadi distributor?',
-    answer: 'Silakan hubungi tim sales kami untuk informasi program kemitraan dan syarat menjadi distributor.',
+    answer: 'Ya, jika produk tidak sesuai dengan deskripsi atau rusak saat pengiriman, kami akan mengganti.',
   },
 ];
 

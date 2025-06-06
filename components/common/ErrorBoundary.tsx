@@ -1,26 +1,24 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertTriangle, RefreshCw, Home, Mail } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  showDetails?: boolean;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
-  resetOnPropsChange?: boolean;
-  resetKeys?: Array<string | number>;
 }
 
 interface State {
   hasError: boolean;
   error: Error | null;
   errorInfo: ErrorInfo | null;
-  eventId: string | null;
+  retryCount: number;
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  private resetTimeoutId: number | null = null;
+  private maxRetries = 3;
 
   constructor(props: Props) {
     super(props);
@@ -28,178 +26,206 @@ class ErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-      eventId: null
+      retryCount: 0
     };
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
-    // Update state so the next render will show the fallback UI
     return {
       hasError: true,
-      error,
-      eventId: `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+      error
     };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log error details
-    console.error('ErrorBoundary caught an error:', {
-      error: error.message,
-      stack: error.stack,
-      componentStack: errorInfo.componentStack,
-      eventId: this.state.eventId,
-      timestamp: new Date().toISOString(),
-      url: typeof window !== 'undefined' ? window.location.href : 'unknown',
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
-    });
-
-    // Update state with error info
     this.setState({
+      error,
       errorInfo
     });
 
-    // Call custom error handler if provided
+    // Custom error handling
     if (this.props.onError) {
-      try {
-        this.props.onError(error, errorInfo);
-      } catch (handlerError) {
-        console.error('Error in custom error handler:', handlerError);
-      }
+      this.props.onError(error, errorInfo);
     }
 
-    // Auto-reset after 30 seconds
-    this.resetTimeoutId = window.setTimeout(() => {
-      this.handleReset();
-    }, 30000);
+    // Log error ke service external (misalnya Sentry)
+    this.logErrorToService(error, errorInfo);
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { resetKeys, resetOnPropsChange } = this.props;
-    const { hasError } = this.state;
-
-    // Reset error boundary when resetKeys change
-    if (hasError && resetKeys) {
-      const prevResetKeys = prevProps.resetKeys || [];
-      const hasResetKeyChanged = resetKeys.some(
-        (key, index) => key !== prevResetKeys[index]
-      );
-
-      if (hasResetKeyChanged) {
-        this.handleReset();
-      }
-    }
-
-    // Reset when any prop changes (if enabled)
-    if (hasError && resetOnPropsChange && prevProps !== this.props) {
-      this.handleReset();
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.resetTimeoutId) {
-      clearTimeout(this.resetTimeoutId);
-    }
-  }
-
-  handleReset = () => {
-    if (this.resetTimeoutId) {
-      clearTimeout(this.resetTimeoutId);
-      this.resetTimeoutId = null;
-    }
-
-    this.setState({
-      hasError: false,
-      error: null,
-      errorInfo: null,
-      eventId: null
+  private logErrorToService = (error: Error, errorInfo: ErrorInfo) => {
+    // Contoh: kirim ke Sentry, LogRocket, atau service monitoring lain
+    console.error('Error caught by ErrorBoundary:', {
+      error: error.message,
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href
     });
+
+    // Kirim ke API endpoint untuk logging
+    try {
+      fetch('/api/errors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: error.message,
+          stack: error.stack,
+          componentStack: errorInfo.componentStack,
+          timestamp: new Date().toISOString(),
+          url: window.location.href
+        })
+      });
+    } catch (logError) {
+      console.error('Failed to log error:', logError);
+    }
   };
 
-  handleReload = () => {
-    if (typeof window !== 'undefined') {
-      window.location.reload();
+  private handleRetry = () => {
+    if (this.state.retryCount < this.maxRetries) {
+      this.setState(prevState => ({
+        hasError: false,
+        error: null,
+        errorInfo: null,
+        retryCount: prevState.retryCount + 1
+      }));
     }
+  };
+
+  private handleReload = () => {
+    window.location.reload();
+  };
+
+  private handleGoHome = () => {
+    window.location.href = '/';
+  };
+
+  private handleContactSupport = () => {
+    const subject = encodeURIComponent('Error Report - Bara Sakti Website');
+    const body = encodeURIComponent(`
+Error occurred at: ${new Date().toISOString()}
+Page: ${window.location.href}
+Error: ${this.state.error?.message || 'Unknown error'}
+
+Please describe what you were doing when this error occurred:
+    `);
+    window.location.href = `mailto:support@barasakti.com?subject=${subject}&body=${body}`;
   };
 
   render() {
-    const { hasError, error, eventId } = this.state;
-    const { children, fallback } = this.props;
-
-    if (hasError) {
+    if (this.state.hasError) {
       // Custom fallback UI
-      if (fallback) {
-        return fallback;
+      if (this.props.fallback) {
+        return this.props.fallback;
       }
 
-      // Default error UI
+      // Default error UI dengan branding Bara Sakti
       return (
-        <div className="min-h-[400px] flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-                <svg 
-                  className="w-8 h-8 text-red-600" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" 
-                  />
-                </svg>
-              </div>
-              <CardTitle className="text-xl text-red-600">
-                Oops! Something went wrong
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-center space-y-4">
-              <p className="text-muted-foreground">
-                We encountered an unexpected error. Please try again or contact support if the problem persists.
-              </p>
-              
-              {process.env.NODE_ENV === 'development' && error && (
-                <details className="text-left bg-gray-50 p-3 rounded text-sm">
-                  <summary className="cursor-pointer font-medium mb-2">
-                    Error Details (Development)
-                  </summary>
-                  <pre className="whitespace-pre-wrap text-xs text-red-600">
-                    {error.message}
-                  </pre>
-                </details>
-              )}
-              
-              {eventId && (
-                <p className="text-xs text-muted-foreground">
-                  Error ID: {eventId}
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-50 px-4">
+          <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8 text-center">
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle className="w-8 h-8 text-orange-600" />
+            </div>
+            
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Api Padam Sejenak!
+            </h1>
+            
+            <p className="text-gray-600 mb-6">
+              Seperti bara yang perlu dinyalakan kembali, website kami mengalami gangguan sementara. Tim Bara Sakti sedang memperbaikinya.
+            </p>
+
+            {/* Error details untuk development */}
+            {this.props.showDetails && process.env.NODE_ENV === 'development' && (
+              <div className="bg-gray-100 rounded-lg p-4 mb-6 text-left">
+                <h3 className="font-semibold text-sm text-gray-800 mb-2">Error Details:</h3>
+                <p className="text-xs text-red-600 font-mono break-all">
+                  {this.state.error?.message}
                 </p>
-              )}
-              
-              <div className="flex gap-2 justify-center">
-                <Button 
-                  onClick={this.handleReset}
-                  variant="outline"
-                  size="sm"
-                >
-                  Try Again
-                </Button>
-                <Button 
-                  onClick={this.handleReload}
-                  size="sm"
-                >
-                  Reload Page
-                </Button>
+                {this.state.error?.stack && (
+                  <details className="mt-2">
+                    <summary className="text-xs text-gray-600 cursor-pointer">Stack Trace</summary>
+                    <pre className="text-xs text-gray-600 mt-1 whitespace-pre-wrap">
+                      {this.state.error.stack}
+                    </pre>
+                  </details>
+                )}
               </div>
-            </CardContent>
-          </Card>
+            )}
+
+            <div className="space-y-3">
+              {/* Retry button */}
+              {this.state.retryCount < this.maxRetries && (
+                <button
+                  onClick={this.handleRetry}
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Nyalakan Kembali ({this.maxRetries - this.state.retryCount} tersisa)
+                </button>
+              )}
+
+              {/* Action buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={this.handleGoHome}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <Home className="w-4 h-4" />
+                  Beranda
+                </button>
+                
+                <button
+                  onClick={this.handleReload}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Reload
+                </button>
+              </div>
+
+              <button
+                onClick={this.handleContactSupport}
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <Mail className="w-4 h-4" />
+                Hubungi Bara Sakti
+              </button>
+            </div>
+
+            <p className="text-xs text-gray-500 mt-6">
+              Error ID: {Date.now().toString(36)}
+            </p>
+          </div>
         </div>
       );
     }
 
-    return children;
+    return this.props.children;
   }
 }
 
 export default ErrorBoundary;
+
+// Hook untuk functional components
+export const useErrorHandler = () => {
+  return (error: Error, errorInfo?: ErrorInfo) => {
+    // Throw error untuk ditangkap oleh ErrorBoundary
+    throw error;
+  };
+};
+
+// HOC wrapper untuk mudah digunakan
+export const withErrorBoundary = <P extends object>(
+  Component: React.ComponentType<P>,
+  errorBoundaryProps?: Omit<Props, 'children'>
+) => {
+  const WrappedComponent = (props: P) => (
+    <ErrorBoundary {...errorBoundaryProps}>
+      <Component {...props} />
+    </ErrorBoundary>
+  );
+
+  WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
+  return WrappedComponent;
+};

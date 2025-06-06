@@ -103,17 +103,17 @@ const ProductCard = memo(function ProductCard({
               className="absolute top-2 left-2 bg-primary/90 text-primary-foreground"
               variant="secondary"
             >
-              {product.category}
+              {String(product.category)}
             </Badge>
           )}
           
           {/* Stock status */}
-          {product.stock !== undefined && product.stock <= 10 && (
+          {product.stock?.quantity !== undefined && product.stock.quantity <= 5 && (
             <Badge 
               className="absolute top-2 right-2 bg-orange-500/90 text-white"
               variant="destructive"
             >
-              {product.stock === 0 ? 'Out of Stock' : `Only ${product.stock} left`}
+              {product.stock?.quantity === 0 ? 'Habis' : `Tersisa ${product.stock?.quantity}`}
             </Badge>
           )}
         </div>
@@ -166,15 +166,15 @@ const ProductCard = memo(function ProductCard({
                 className="flex-1"
                 onClick={handleViewDetails}
               >
-                View Details
+                Lihat Detail
               </Button>
               <Button 
                 size="sm" 
                 className="flex-1"
                 onClick={handleAddToCart}
-                disabled={product.stock === 0}
+                disabled={product.stock?.quantity === 0}
               >
-                {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                {product.stock?.quantity === 0 ? 'Habis' : 'Pesan Sekarang'}
               </Button>
             </div>
           </div>

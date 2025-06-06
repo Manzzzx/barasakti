@@ -32,12 +32,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://barasakti.com'),
   title: {
-    default: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
+    default: 'Barasakti - Arang Briket Berkualitas dari Brebes',
     template: '%s | Barasakti',
   },
-  description: 'Barasakti adalah produsen arang briket premium untuk BBQ, shisha, hookah, dan keperluan industri. Kualitas terjamin dengan pengalaman lebih dari 10 tahun.',
-  keywords: ['arang briket', 'charcoal', 'BBQ', 'shisha', 'hookah', 'briket premium', 'barasakti', 'indonesia', 'coconut charcoal'],
-  authors: [{ name: 'Barasakti Team' }],
+  description: 'Barasakti adalah produsen arang briket lokal dari Brebes untuk BBQ, shisha, dan keperluan rumah tangga. Kualitas terjamin dengan harga terjangkau.',
+  keywords: ['arang briket', 'charcoal', 'BBQ', 'shisha', 'hookah', 'briket lokal', 'barasakti', 'brebes', 'coconut charcoal'],
+  authors: [{ name: 'Barasakti' }],
   creator: 'Barasakti',
   publisher: 'Barasakti',
   formatDetection: {
@@ -50,21 +50,21 @@ export const metadata: Metadata = {
     locale: 'id_ID',
     url: 'https://barasakti.com',
     siteName: 'Barasakti',
-    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
-    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga kompetitif.',
+    title: 'Barasakti - Arang Briket Berkualitas dari Brebes',
+    description: 'Arang briket berkualitas untuk BBQ, shisha, dan rumah tangga. Produksi lokal dari Brebes dengan harga terjangkau.',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Barasakti - Arang Briket Premium',
+        alt: 'Barasakti - Arang Briket Berkualitas',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
-    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga kompetitif.',
+    title: 'Barasakti - Arang Briket Berkualitas dari Brebes',
+    description: 'Arang briket berkualitas untuk BBQ, shisha, dan rumah tangga. Produksi lokal dengan harga terjangkau.',
     images: ['/images/twitter-image.jpg'],
   },
   robots: {

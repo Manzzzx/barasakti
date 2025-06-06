@@ -74,6 +74,9 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   <Mail className="w-4 h-4" />
                   <span>{COMPANY_INFO.contact.email}</span>
                 </div>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded">
+                  🚚 Gratis Ongkir Area Brebes
+                </span>
               </div>
               <div className="text-xs">
                 {COMPANY_INFO.businessHours.weekdays}

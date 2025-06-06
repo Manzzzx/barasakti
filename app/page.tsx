@@ -25,19 +25,19 @@ const ContactSection = dynamic(() => import('@/components/sections/ContactSectio
 
 // SEO Metadata
 export const metadata: Metadata = {
-  title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
-  description: 'Barasakti menyediakan arang briket premium untuk BBQ, shisha, dan keperluan industri. Kualitas terbaik dengan harga kompetitif.',
-  keywords: 'arang briket, charcoal, BBQ, shisha, hookah, briket premium, barasakti',
+  title: 'Barasakti - Arang Briket Berkualitas untuk Kebutuhan Anda',
+  description: 'Barasakti menyediakan arang briket berkualitas untuk BBQ, shisha, dan keperluan rumah tangga. Produksi lokal dengan harga terjangkau.',
+  keywords: 'arang briket, charcoal, BBQ, shisha, hookah, briket lokal, barasakti, brebes',
   openGraph: {
-    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
-    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga terbaik.',
+    title: 'Barasakti - Arang Briket Berkualitas untuk Kebutuhan Anda',
+    description: 'Arang briket berkualitas untuk BBQ, shisha, dan rumah tangga. Produksi lokal dengan harga terjangkau.',
     type: 'website',
     locale: 'id_ID',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Barasakti - Produsen Arang Briket Berkualitas Tinggi',
-    description: 'Arang briket premium untuk BBQ, shisha, dan industri. Kualitas terjamin dengan harga terbaik.',
+    title: 'Barasakti - Arang Briket Berkualitas untuk Kebutuhan Anda',
+    description: 'Arang briket berkualitas untuk BBQ, shisha, dan rumah tangga. Produksi lokal dengan harga terjangkau.',
   },
   robots: {
     index: true,

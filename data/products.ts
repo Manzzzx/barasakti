@@ -20,76 +20,75 @@ export const productCategories: ProductCategory[] = [
     id: 'bbq-premium',
     name: 'BBQ Premium',
     slug: 'bbq-premium',
-    description: 'Briket kelapa premium untuk BBQ dan grilling',
+    description: 'Briket kelapa premium untuk BBQ dan grilling rumahan',
     icon: 'Flame',
     color: 'bara-500'
   },
   {
-    id: 'restaurant-grade',
-    name: 'Restaurant Grade',
-    slug: 'restaurant-grade', 
-    description: 'Briket kualitas restoran untuk kebutuhan komersial',
-    icon: 'ChefHat',
+    id: 'shisha-hookah',
+    name: 'Shisha & Hookah',
+    slug: 'shisha-hookah', 
+    description: 'Arang briket khusus untuk shisha dan hookah',
+    icon: 'Coffee',
     color: 'eco-500'
   },
   {
-    id: 'bulk-industrial',
-    name: 'Bulk Industrial',
-    slug: 'bulk-industrial',
-    description: 'Briket untuk kebutuhan industri dan volume besar',
-    icon: 'Factory',
+    id: 'warung-kecil',
+    name: 'Warung & Usaha Kecil',
+    slug: 'warung-kecil',
+    description: 'Arang briket untuk warung makan dan usaha kecil',
+    icon: 'Store',
     color: 'premium-600'
   }
 ];
 
-// Data Produk Briket Kelapa Premium
+// Data Produk Arang Briket
 export const products: Product[] = [
   {
-    id: 'bara-premium-cube-3kg',
-    name: 'Bara Sakti Premium Cube 3kg',
-    description: 'Briket kelapa premium berbentuk kubus dengan kualitas terbaik. Terbuat dari 100% tempurung kelapa pilihan yang diproses dengan teknologi modern. Ideal untuk BBQ rumahan, camping, dan acara outdoor.',
-    shortDescription: 'Briket kelapa premium kubus 3kg - Tahan lama, panas stabil, minim asap',
+    id: 'barasakti-bbq-3kg',
+    name: 'Barasakti BBQ 3kg',
+    description: 'Arang briket berkualitas untuk BBQ rumahan. Terbuat dari tempurung kelapa pilihan yang diproses secara tradisional. Cocok untuk acara keluarga, camping, dan BBQ santai di rumah.',
+    shortDescription: 'Arang briket BBQ 3kg - Cocok untuk keluarga dan acara kecil',
     price: {
-      retail: 45000,      // Harga eceran
-      wholesale: 38000,   // Harga grosir (min 10 pcs)
-      bulk: 32000        // Harga bulk (min 50 pcs)
+      retail: 25000,      // Harga eceran
+      wholesale: 22000,   // Harga grosir (min 10 pcs)
+      bulk: 20000        // Harga bulk (min 20 pcs)
     },
     specifications: {
       weight: '3 kg per kemasan',
-      burnTime: '3-4 jam pembakaran stabil',
-      heatOutput: '7000-8000 kcal/kg',
-      ashContent: 'Maksimal 3%',
-      moisture: 'Maksimal 8%'
+      burnTime: '2-3 jam pembakaran',
+      heatOutput: '6500-7000 kcal/kg',
+      ashContent: 'Maksimal 5%',
+      moisture: 'Maksimal 10%'
     },
     features: [
-      'Tahan lama hingga 4 jam',
-      'Panas stabil dan merata',
-      'Minim asap dan bau',
+      'Tahan lama 2-3 jam',
+      'Panas stabil untuk BBQ',
+      'Minim asap',
       'Mudah dinyalakan',
-      'Ramah lingkungan 100%',
-      'Tidak mengandung bahan kimia'
+      'Ramah lingkungan',
+      'Harga terjangkau'
     ],
     category: productCategories[0],
     images: {
-      main: '/images/products/bara-premium-cube-3kg-main.jpg',
+      main: '/images/products/barasakti-bbq-3kg-main.jpg',
       gallery: [
-        '/images/products/bara-premium-cube-3kg-1.jpg',
-        '/images/products/bara-premium-cube-3kg-2.jpg',
-        '/images/products/bara-premium-cube-3kg-3.jpg',
-        '/images/products/bara-premium-cube-3kg-packaging.jpg'
+        '/images/products/barasakti-bbq-3kg-1.jpg',
+        '/images/products/barasakti-bbq-3kg-2.jpg',
+        '/images/products/barasakti-bbq-3kg-packaging.jpg'
       ],
-      thumbnail: '/images/products/bara-premium-cube-3kg-thumb.jpg'
+      thumbnail: '/images/products/barasakti-bbq-3kg-thumb.jpg'
     },
     stock: {
       available: true,
-      quantity: 500,
+      quantity: 100,
       unit: 'kemasan'
     },
     seo: {
-      slug: 'bara-sakti-premium-cube-3kg',
-      metaTitle: 'Bara Sakti Premium Cube 3kg - Briket Kelapa Terbaik untuk BBQ',
-      metaDescription: 'Briket kelapa premium Bara Sakti 3kg. Tahan lama 4 jam, panas stabil, minim asap. Cocok untuk BBQ, camping, dan grilling. Harga terjangkau, kualitas premium.',
-      keywords: ['briket kelapa', 'bbq', 'arang briket', 'bara sakti', 'briket premium', 'arang bbq']
+      slug: 'barasakti-bbq-3kg',
+      metaTitle: 'Barasakti BBQ 3kg - Arang Briket Terjangkau untuk Keluarga',
+      metaDescription: 'Arang briket Barasakti 3kg untuk BBQ rumahan. Kualitas bagus, harga terjangkau, tahan 3 jam. Cocok untuk keluarga dan acara kecil.',
+      keywords: ['arang briket', 'bbq', 'barasakti', 'briket murah', 'arang bbq']
     },
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date('2024-01-20'),
@@ -97,50 +96,49 @@ export const products: Product[] = [
     bestSeller: true
   },
   {
-    id: 'bara-restaurant-grade-10kg',
-    name: 'Bara Sakti Restaurant Grade 10kg',
-    description: 'Briket kelapa kualitas restoran untuk kebutuhan komersial. Dirancang khusus untuk dapur profesional, warung makan, dan restoran. Memberikan panas konsisten untuk memasak dalam volume besar.',
-    shortDescription: 'Briket kelapa restaurant grade 10kg - Untuk kebutuhan komersial dan profesional',
+    id: 'barasakti-shisha-1kg',
+    name: 'Barasakti Shisha 1kg',
+    description: 'Arang briket khusus untuk shisha dan hookah. Ukuran kecil dan pembakaran yang stabil membuat pengalaman shisha Anda lebih nikmat. Tidak berbau dan minim asap.',
+    shortDescription: 'Arang briket shisha 1kg - Khusus untuk hookah dan shisha',
     price: {
-      retail: 120000,
-      wholesale: 105000,   // Min 5 karung
-      bulk: 95000         // Min 20 karung
+      retail: 15000,
+      wholesale: 13000,   // Min 10 pcs
+      bulk: 12000        // Min 30 pcs
     },
     specifications: {
-      weight: '10 kg per karung',
-      burnTime: '5-6 jam pembakaran kontinyu',
-      heatOutput: '7500-8500 kcal/kg',
-      ashContent: 'Maksimal 2.5%',
-      moisture: 'Maksimal 6%'
+      weight: '1 kg per kemasan',
+      burnTime: '1.5-2 jam pembakaran',
+      heatOutput: '6000-6500 kcal/kg',
+      ashContent: 'Maksimal 3%',
+      moisture: 'Maksimal 8%'
     },
     features: [
-      'Kualitas restaurant grade',
-      'Pembakaran 5-6 jam kontinyu',
-      'Panas sangat stabil',
-      'Abu minimal untuk kebersihan',
-      'Ekonomis untuk volume besar',
-      'Sertifikat food grade'
+      'Khusus untuk shisha',
+      'Tidak berbau',
+      'Minim asap',
+      'Panas merata',
+      'Ukuran pas untuk hookah',
+      'Kemasan praktis'
     ],
     category: productCategories[1],
     images: {
-      main: '/images/products/bara-restaurant-grade-10kg-main.jpg',
+      main: '/images/products/barasakti-shisha-1kg-main.jpg',
       gallery: [
-        '/images/products/bara-restaurant-grade-10kg-1.jpg',
-        '/images/products/bara-restaurant-grade-10kg-2.jpg',
-        '/images/products/bara-restaurant-grade-10kg-usage.jpg'
+        '/images/products/barasakti-shisha-1kg-1.jpg',
+        '/images/products/barasakti-shisha-1kg-2.jpg'
       ],
-      thumbnail: '/images/products/bara-restaurant-grade-10kg-thumb.jpg'
+      thumbnail: '/images/products/barasakti-shisha-1kg-thumb.jpg'
     },
     stock: {
       available: true,
-      quantity: 200,
-      unit: 'karung'
+      quantity: 150,
+      unit: 'kemasan'
     },
     seo: {
-      slug: 'bara-sakti-restaurant-grade-10kg',
-      metaTitle: 'Bara Sakti Restaurant Grade 10kg - Briket Kelapa Kualitas Restoran',
-      metaDescription: 'Briket kelapa restaurant grade Bara Sakti 10kg. Kualitas profesional untuk restoran, warung, catering. Panas stabil 6 jam, abu minimal, food grade certified.',
-      keywords: ['briket restoran', 'briket komersial', 'arang restoran', 'briket food grade', 'bara sakti restaurant']
+      slug: 'barasakti-shisha-1kg',
+      metaTitle: 'Barasakti Shisha 1kg - Arang Briket Khusus Hookah',
+      metaDescription: 'Arang briket Barasakti 1kg khusus shisha. Tidak berbau, minim asap, panas merata. Cocok untuk hookah dan shisha lounge.',
+      keywords: ['arang shisha', 'briket hookah', 'barasakti', 'arang hookah']
     },
     createdAt: new Date('2025-04-10'),
     updatedAt: new Date('2025-05-18'),
@@ -148,54 +146,54 @@ export const products: Product[] = [
     bestSeller: false
   },
   {
-    id: 'bara-bulk-industrial-25kg',
-    name: 'Bara Sakti Bulk Industrial 25kg',
-    description: 'Briket kelapa untuk kebutuhan industri dan volume sangat besar. Cocok untuk pabrik, industri makanan, hotel besar, dan kebutuhan komersial skala besar. Harga ekonomis dengan kualitas terjamin.',
-    shortDescription: 'Briket kelapa industrial 25kg - Untuk kebutuhan industri dan volume besar',
+    id: 'barasakti-warung-10kg',
+    name: 'Barasakti Warung 10kg',
+    description: 'Arang briket ekonomis untuk warung makan dan usaha kecil. Kemasan besar dengan harga hemat, cocok untuk kebutuhan memasak sehari-hari warung dan rumah makan kecil.',
+    shortDescription: 'Arang briket warung 10kg - Ekonomis untuk usaha kecil',
     price: {
-      retail: 280000,
-      wholesale: 250000,   // Min 10 karung
-      bulk: 220000        // Min 50 karung
+      retail: 65000,
+      wholesale: 60000,   // Min 5 karung
+      bulk: 55000        // Min 10 karung
     },
     specifications: {
-      weight: '25 kg per karung jumbo',
-      burnTime: '6-8 jam pembakaran industrial',
-      heatOutput: '7200-8000 kcal/kg',
-      ashContent: 'Maksimal 4%',
-      moisture: 'Maksimal 10%'
+      weight: '10 kg per karung',
+      burnTime: '4-5 jam pembakaran',
+      heatOutput: '6500-7000 kcal/kg',
+      ashContent: 'Maksimal 6%',
+      moisture: 'Maksimal 12%'
     },
     features: [
-      'Volume besar ekonomis',
-      'Pembakaran 6-8 jam',
-      'Cocok untuk industri',
-      'Harga kompetitif',
-      'Kualitas konsisten',
-      'Pengiriman bulk tersedia'
+      'Kemasan ekonomis 10kg',
+      'Cocok untuk warung',
+      'Harga hemat',
+      'Pembakaran tahan lama',
+      'Panas stabil untuk masak',
+      'Kemasan karung praktis'
     ],
     category: productCategories[2],
     images: {
-      main: '/images/products/bara-bulk-industrial-25kg-main.jpg',
+      main: '/images/products/barasakti-warung-10kg-main.jpg',
       gallery: [
-        '/images/products/bara-bulk-industrial-25kg-1.jpg',
-        '/images/products/bara-bulk-industrial-25kg-warehouse.jpg'
+        '/images/products/barasakti-warung-10kg-1.jpg',
+        '/images/products/barasakti-warung-10kg-usage.jpg'
       ],
-      thumbnail: '/images/products/bara-bulk-industrial-25kg-thumb.jpg'
+      thumbnail: '/images/products/barasakti-warung-10kg-thumb.jpg'
     },
     stock: {
       available: true,
-      quantity: 100,
-      unit: 'karung jumbo'
+      quantity: 50,
+      unit: 'karung'
     },
     seo: {
-      slug: 'bara-sakti-bulk-industrial-25kg',
-      metaTitle: 'Bara Sakti Bulk Industrial 25kg - Briket Kelapa untuk Industri',
-      metaDescription: 'Briket kelapa industrial Bara Sakti 25kg. Volume besar untuk industri, hotel, pabrik. Harga ekonomis, kualitas konsisten, pembakaran 8 jam.',
-      keywords: ['briket industri', 'briket bulk', 'arang industri', 'briket volume besar', 'bara sakti industrial']
+      slug: 'barasakti-warung-10kg',
+      metaTitle: 'Barasakti Warung 10kg - Arang Briket Ekonomis untuk Usaha',
+      metaDescription: 'Arang briket Barasakti 10kg untuk warung dan usaha kecil. Harga ekonomis, tahan lama, cocok untuk kebutuhan memasak sehari-hari.',
+      keywords: ['arang warung', 'briket ekonomis', 'barasakti', 'arang usaha']
     },
-    createdAt: new Date('2024-01-05'),
-    updatedAt: new Date('2024-01-15'),
+    createdAt: new Date('2025-04-05'),
+    updatedAt: new Date('2025-05-10'),
     featured: false,
-    bestSeller: false
+    bestSeller: true
   }
 ];
 
