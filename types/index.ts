@@ -56,8 +56,8 @@ export interface SocialLink {
 }
 
 export interface CompanyInfo {
-  email: any;
-  phone: any;
+  email: string;
+  phone: string;
   name: string;
   tagline: string;
   description: string;

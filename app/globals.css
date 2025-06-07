@@ -37,6 +37,44 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  
+  /* Custom Color Palettes */
+  /* Bara Palette (Orange/Fire theme) */
+  --color-bara-50: #FEF7F0;
+  --color-bara-100: #FEEEE0;
+  --color-bara-200: #FDD5B8;
+  --color-bara-300: #FCBC90;
+  --color-bara-400: #FA8A40;
+  --color-bara-500: #FF6B35;
+  --color-bara-600: #E55A2B;
+  --color-bara-700: #CC4A21;
+  --color-bara-800: #B33A17;
+  --color-bara-900: #992A0D;
+  
+  /* Eco Palette (Green/Nature theme) */
+  --color-eco-50: #F0FDF4;
+  --color-eco-100: #DCFCE7;
+  --color-eco-200: #BBF7D0;
+  --color-eco-300: #86EFAC;
+  --color-eco-400: #4ADE80;
+  --color-eco-500: #16A34A;
+  --color-eco-600: #15803D;
+  --color-eco-700: #166534;
+  --color-eco-800: #14532D;
+  --color-eco-900: #0F3B26;
+  
+  /* Premium Palette (Grayscale/Luxury theme) */
+  --color-premium-50: #F8F8F8;
+  --color-premium-100: #F0F0F0;
+  --color-premium-200: #E8E8E8;
+  --color-premium-300: #D1D1D1;
+  --color-premium-400: #B4B4B4;
+  --color-premium-500: #737373;
+  --color-premium-600: #525252;
+  --color-premium-700: #404040;
+  --color-premium-800: #1F1F1F;
+  --color-premium-900: #0F0F0F;
+  
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -119,4 +157,44 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Utility classes untuk menggunakan custom colors */
+@layer utilities {
+  /* Bara utilities */
+  .text-bara-primary { color: var(--color-bara-500); }
+  .bg-bara-primary { background-color: var(--color-bara-500); }
+  .border-bara-primary { border-color: var(--color-bara-500); }
+  
+  /* Eco utilities */
+  .text-eco-primary { color: var(--color-eco-500); }
+  .bg-eco-primary { background-color: var(--color-eco-500); }
+  .border-eco-primary { border-color: var(--color-eco-500); }
+  
+  /* Premium utilities */
+  .text-premium-primary { color: var(--color-premium-500); }
+  .bg-premium-primary { background-color: var(--color-premium-500); }
+  .border-premium-primary { border-color: var(--color-premium-500); }
+}
+
+/* Theme variations menggunakan custom colors */
+.theme-bara {
+  --primary: var(--color-bara-500);
+  --primary-foreground: #ffffff;
+  --accent: var(--color-bara-100);
+  --accent-foreground: var(--color-bara-900);
+}
+
+.theme-eco {
+  --primary: var(--color-eco-500);
+  --primary-foreground: #ffffff;
+  --accent: var(--color-eco-100);
+  --accent-foreground: var(--color-eco-900);
+}
+
+.theme-premium {
+  --primary: var(--color-premium-500);
+  --primary-foreground: #ffffff;
+  --accent: var(--color-premium-100);
+  --accent-foreground: var(--color-premium-900);
 }

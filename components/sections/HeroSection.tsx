@@ -4,9 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, Shield, Truck, Phone } from 'lucide-react';
+import { ArrowRight, Star, Shield, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+// import { Badge } from '@/components/ui/badge';
 import { COMPANY_INFO, ANIMATION_VARIANTS, IMAGE_CONFIG } from '@/lib/constants';
 
 interface HeroSectionProps {
@@ -57,9 +57,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
             variants={ANIMATION_VARIANTS.slideUp}
             className="mb-6"
           >
-            <Badge className="bg-bara-500/20 text-bara-100 border-bara-400/30 px-4 py-2 text-sm font-medium">
-              ♻️ Ramah Lingkungan
-            </Badge>
           </motion.div>
 
           {/* Main Heading */}
@@ -76,7 +73,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
           >
             Bara Sakti
-            <span className="block text-bara-300">
+            <span className="block text-bara-400">
               Arang Briket Berkualitas
             </span>
           </motion.h1>
@@ -152,23 +149,23 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
               </Link>
             </Button>
             
-            <Button
+            {/* <Button
               asChild
               variant="outline"
               size="lg"
-              className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur-sm"
+              className="border-eco/30 text-eco-500 hover:bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur-sm"
             >
               <Link href={`https://wa.me/${COMPANY_INFO.contact.whatsapp.replace(/[^0-9]/g, '')}`}>
                 <Phone className="mr-2 w-5 h-5" />
                 Hubungi Kami
               </Link>
-            </Button>
+            </Button> */}
           </motion.div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.8 }}
@@ -188,7 +185,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
             />
           </motion.div>
         </div>
-      </motion.div>
+      </motion.div> */}
     </section>
   );
 };

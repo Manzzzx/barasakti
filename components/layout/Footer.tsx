@@ -52,8 +52,6 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         links: [
           { label: 'Tentang Kami', href: '/tentang' },
           { label: 'Blog', href: '/blog' },
-          { label: 'Karir', href: '/karir' },
-          { label: 'Kebijakan Privasi', href: '/privacy' }
         ]
       },
       {
@@ -62,7 +60,6 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           { label: 'Hubungi Kami', href: '/kontak' },
           { label: 'FAQ', href: '/faq' },
           { label: 'Panduan Penggunaan', href: '/panduan' },
-          { label: 'Garansi', href: '/garansi' }
         ]
       }
     ];
@@ -78,8 +75,8 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         case 'instagram':
           IconComponent = Instagram;
           break;
-        case 'facebook':
-          IconComponent = Facebook;
+        case 'whatsapp':
+          IconComponent = Phone;
           break;
         case 'youtube':
           IconComponent = Youtube;
@@ -87,7 +84,6 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         default:
           IconComponent = Instagram; // fallback
       }
-      
       return {
         ...social,
         icon: IconComponent,
@@ -291,7 +287,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               onClick={scrollToTop}
               size="sm"
               variant="outline"
-              className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
+              className="border-premium-700 text-premium-300 bg-bara-500 hover:bg-bara-800 hover:text-premium-500 transition-colors"
               aria-label="Kembali ke atas"
             >
               <ArrowUp className="w-4 h-4" />

@@ -14,7 +14,7 @@ import { CompanyInfo, NavigationItem, SocialLink } from '@/types';
 export const COMPANY_INFO: CompanyInfo = {
   email: 'barasakti.brebes@gmail.com',
   phone: '+62 831-9244-3183',
-  name: 'Barasakti',
+  name: 'Bara Sakti',
   tagline: 'Arang Briket Berkualitas dari Brebes',
   description: 'Barasakti adalah usaha keluarga yang memproduksi arang briket berkualitas dari tempurung kelapa. Kami melayani kebutuhan BBQ, shisha, dan rumah tangga dengan harga terjangkau dan kualitas terjamin.',
   address: {
@@ -44,8 +44,8 @@ export const COMPANY_INFO: CompanyInfo = {
     },
   ],
   businessHours: {
-    weekdays: 'Senin - Jumat: 08:00 - 17:00 WIB',
-    weekend: 'Sabtu: 08:00 - 15:00 WIB (Minggu Tutup)'
+    weekdays: 'Senin - Jumat: 09:00 - 16:00 WIB',
+    weekend: 'Sabtu: 09:00 - 16:00 WIB (Minggu Tutup)'
   }
 };
 
@@ -66,12 +66,12 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
         href: '/produk/bbq-premium'
       },
       {
-        label: 'Restaurant Grade',
-        href: '/produk/restaurant-grade'
+        label: 'Shisha & Hookah',
+        href: '/produk/shisha-hookah'
       },
       {
-        label: 'Bulk Industrial',
-        href: '/produk/bulk-industrial'
+        label: 'Warung & Usaha Kecil',
+        href: '/produk/warung-usaha-kecil'
       }
     ]
   },
@@ -95,7 +95,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
 // SEO Default Values
 export const SEO_DEFAULTS = {
   title: 'Bara Sakti - Briket Kelapa Premium Terpercaya',
-  description: 'Bara Sakti menyediakan briket kelapa premium berkualitas tinggi untuk BBQ, restoran, dan industri. Tahan lama, panas stabil, ramah lingkungan. Harga terjangkau dengan kualitas terbaik.',
+  description: 'Bara Sakti menyediakan briket kelapa premium berkualitas tinggi untuk BBQ, Warung dan Usaha Kecil. Tahan lama, panas stabil, ramah lingkungan. Harga terjangkau dengan kualitas terbaik.',
   keywords: [
     'briket kelapa',
     'arang briket',

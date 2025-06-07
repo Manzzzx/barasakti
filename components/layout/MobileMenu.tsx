@@ -130,32 +130,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                   <Mail className="w-4 h-4" />
                   <span>{COMPANY_INFO.contact.email}</span>
                 </div>
-                <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
-                  📍 Melayani: Brebes, Tegal, Pemalang, Cirebon
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="space-y-2 mb-6">
-                <Button
-                  asChild
-                  className="w-full bg-green-600 hover:bg-green-700 text-white"
-                  onClick={handleLinkClick}
-                >
-                  <a href="https://wa.me/6281234567890?text=Halo%20Bara%20Sakti,%20saya%20mau%20pesan%20briket">
-                    💬 Chat WhatsApp
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="w-full border-bara-500 text-bara-500 hover:bg-bara-50"
-                  onClick={handleLinkClick}
-                >
-                  <Link href="/kontak">
-                    📞 Hubungi Kami
-                  </Link>
-                </Button>
               </div>
 
               {/* CTA Button */}

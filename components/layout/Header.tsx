@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         variants={ANIMATION_VARIANTS.fadeIn}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-lg'
+            ? 'bg-white/20 backdrop-blur-md shadow-lg'
             : 'bg-transparent'
         } ${className}`}
       >
@@ -74,9 +74,9 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   <Mail className="w-4 h-4" />
                   <span>{COMPANY_INFO.contact.email}</span>
                 </div>
-                <span className="text-xs bg-white/20 px-2 py-1 rounded">
+                {/* <span className="text-xs bg-white/20 px-2 py-1 rounded">
                   🚚 Gratis Ongkir Area Brebes
-                </span>
+                </span> */}
               </div>
               <div className="text-xs">
                 {COMPANY_INFO.businessHours.weekdays}
@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         </div>
 
         {/* Main Navigation */}
-        <nav className="container mx-auto px-4 py-4">
+        <nav className="container mx-auto px-2 py-2">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3">
