@@ -1,9 +1,22 @@
 "use client"
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const NotFound = () => {
+  const [isClient, setIsClient] = useState(false);
+  const [randomValues, setRandomValues] = useState<number[]>([]);
+
+  useEffect(() => {
+    setIsClient(true);
+    // Generate all random values once on client side
+    const values = [];
+    for (let i = 0; i < 44; i++) { // 32 for charcoal + 12 for embers
+      values.push(Math.random());
+    }
+    setRandomValues(values);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
       <div className="max-w-sm sm:max-w-md w-full text-center">
@@ -19,22 +32,29 @@ const NotFound = () => {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="grid grid-cols-8 gap-1 opacity-50">
                 {/* Scattered charcoal pieces */}
-                {[...Array(32)].map((_, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      w-3 h-3 rounded-sm transform rotate-12
-                      ${index % 3 === 0 ? 'bg-gray-800' : index % 3 === 1 ? 'bg-gray-700' : 'bg-gray-600'}
-                      ${Math.random() > 0.3 ? 'opacity-80' : 'opacity-40'}
-                    `}
-                    style={{
-                      transform: `rotate(${Math.random() * 45}deg) scale(${0.5 + Math.random() * 0.5})`
-                    }}
-                  >
-                    {/* Charcoal texture dot */}
-                    <div className="absolute inset-0.5 bg-black rounded-sm opacity-60"></div>
-                  </div>
-                ))}
+                {[...Array(32)].map((_, index) => {
+                  const random1 = randomValues[index] || 0.5;
+                  const random2 = randomValues[index + 32] || 0.5;
+                  
+                  return (
+                    <div
+                      key={index}
+                      className={`
+                        w-3 h-3 rounded-sm transform rotate-12
+                        ${index % 3 === 0 ? 'bg-gray-800' : index % 3 === 1 ? 'bg-gray-700' : 'bg-gray-600'}
+                        ${isClient && random1 > 0.3 ? 'opacity-80' : 'opacity-40'}
+                      `}
+                      style={isClient ? {
+                        transform: `rotate(${random1 * 45}deg) scale(${0.5 + random2 * 0.5})`
+                      } : {
+                        transform: 'rotate(22.5deg) scale(0.75)'
+                      }}
+                    >
+                      {/* Charcoal texture dot */}
+                      <div className="absolute inset-0.5 bg-black rounded-sm opacity-60"></div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -119,24 +139,33 @@ const NotFound = () => {
         </div>
 
         {/* Floating Embers Effect */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-          {[...Array(12)].map((_, index) => (
-            <div
-              key={index}
-              className={`absolute rounded-full animate-float-ember`}
-              style={{
-                width: `${2 + Math.random() * 4}px`,
-                height: `${2 + Math.random() * 4}px`,
-                backgroundColor: index % 3 === 0 ? '#ef4444' : index % 3 === 1 ? '#f97316' : '#fbbf24',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 4}s`,
-                animationDuration: `${3 + Math.random() * 2}s`,
-                opacity: 0.3 + Math.random() * 0.4
-              }}
-            ></div>
-          ))}
-        </div>
+        {isClient && (
+          <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+            {[...Array(12)].map((_, index) => {
+              const random1 = randomValues[index] || 0.5;
+              const random2 = randomValues[index + 12] || 0.5;
+              const random3 = randomValues[index + 24] || 0.5;
+              const random4 = randomValues[index + 36] || 0.5;
+              
+              return (
+                <div
+                  key={index}
+                  className="absolute rounded-full animate-float-ember"
+                  style={{
+                    width: `${2 + random1 * 4}px`,
+                    height: `${2 + random1 * 4}px`,
+                    backgroundColor: index % 3 === 0 ? '#ef4444' : index % 3 === 1 ? '#f97316' : '#fbbf24',
+                    left: `${random2 * 100}%`,
+                    top: `${random3 * 100}%`,
+                    animationDelay: `${random4 * 4}s`,
+                    animationDuration: `${3 + random1 * 2}s`,
+                    opacity: 0.3 + random2 * 0.4
+                  }}
+                ></div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Fire SVG decoration */}
         <div className="absolute bottom-8 sm:bottom-10 left-1/2 transform -translate-x-1/2 opacity-20">

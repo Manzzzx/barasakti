@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -22,6 +22,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>('hero');
+  const [isScrolling, setIsScrolling] = useState(false);
   
   const pathname = usePathname();
   const { y: scrollY } = useScrollPosition({ throttleMs: 50 });
@@ -31,7 +32,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
     setIsScrolled(scrollY > 50);
   }, [scrollY]);
 
-  // Handle active section detection for home page
+  // Improved active section detection for home page
   useEffect(() => {
     if (pathname !== '/') return;
 
@@ -43,27 +44,63 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
     ];
 
     const handleSectionDetection = () => {
-      const scrollPosition = window.scrollY + 100; // Offset for better UX
+      // Skip detection if currently scrolling programmatically
+      if (isScrolling) return;
       
+      const scrollPosition = window.scrollY + 150; // Increased offset for better UX
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Handle edge case: if near bottom of page, activate last section
+      if (scrollPosition + windowHeight >= documentHeight - 100) {
+        const lastSection = sections[sections.length - 1];
+        if (lastSection && activeSection !== lastSection.id) {
+          setActiveSection(lastSection.id);
+        }
+        return;
+      }
+      
+      // Find the current section based on scroll position
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section.element) {
           const sectionTop = section.element.offsetTop;
-          if (scrollPosition >= sectionTop) {
-            setActiveSection(section.id);
+          const sectionHeight = section.element.offsetHeight;
+          const sectionBottom = sectionTop + sectionHeight;
+          
+          // Check if section is in viewport
+          if (scrollPosition >= sectionTop - 100 && scrollPosition < sectionBottom + 100) {
+            if (activeSection !== section.id) {
+              setActiveSection(section.id);
+            }
             break;
           }
         }
       }
     };
 
-    // Initial check
-    handleSectionDetection();
+    // Initial check with delay to ensure DOM is ready
+    const timeoutId = setTimeout(handleSectionDetection, 100);
     
-    // Add scroll listener
-    window.addEventListener('scroll', handleSectionDetection, { passive: true });
-    return () => window.removeEventListener('scroll', handleSectionDetection);
-  }, [pathname]);
+    // Add scroll listener with throttling
+    let ticking = false;
+    const scrollListener = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleSectionDetection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    window.addEventListener('scroll', scrollListener, { passive: true });
+    
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('scroll', scrollListener);
+    };
+  }, [pathname, activeSection, isScrolling]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -77,6 +114,40 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
       document.body.style.overflow = 'unset';
     };
   }, [isMobileMenuOpen]);
+
+  // Smooth scroll function with error handling
+  const smoothScrollToSection = useCallback((sectionId: string) => {
+    try {
+      const element = document.getElementById(sectionId);
+      if (!element) {
+        console.warn(`Section with id '${sectionId}' not found`);
+        return;
+      }
+
+      setIsScrolling(true);
+      
+      // Calculate offset for fixed header
+      const headerHeight = 80; // Adjust based on your header height
+      const elementPosition = element.offsetTop - headerHeight;
+      
+      // Use smooth scrolling
+      window.scrollTo({
+        top: Math.max(0, elementPosition),
+        behavior: 'smooth'
+      });
+      
+      // Reset scrolling flag after animation completes
+      setTimeout(() => {
+        setIsScrolling(false);
+        // Force update active section after smooth scroll
+        setActiveSection(sectionId);
+      }, 1000); // Adjust timing based on scroll duration
+      
+    } catch (error) {
+      console.error('Error during smooth scroll:', error);
+      setIsScrolling(false);
+    }
+  }, []);
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -99,10 +170,36 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
     setOpenDropdown(openDropdown === itemLabel ? null : itemLabel);
   };
 
-  const handleLinkClick = () => {
+  // Enhanced link click handler with smooth scroll
+  const handleLinkClick = useCallback((item: NavigationItem, event?: React.MouseEvent) => {
     closeMobileMenu();
     setOpenDropdown(null);
-  };
+    
+    // Handle section links on home page
+    if (pathname === '/' && item.href.startsWith('/')) {
+      const sectionMap: Record<string, string> = {
+        '/': 'hero',
+        '/tentang': 'tentang',
+        '/gallery': 'galeri',
+        '/kontak': 'kontak'
+      };
+      
+      const sectionId = sectionMap[item.href];
+      if (sectionId) {
+        event?.preventDefault();
+        smoothScrollToSection(sectionId);
+        return;
+      }
+    }
+    
+    // Handle hash links
+    if (item.href.startsWith('#')) {
+      event?.preventDefault();
+      const sectionId = item.href.substring(1);
+      smoothScrollToSection(sectionId);
+      return;
+    }
+  }, [pathname, smoothScrollToSection]);
 
   // Function to determine if navigation item is active
   const isNavigationActive = (item: NavigationItem): boolean => {
@@ -179,7 +276,13 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
               <ChevronDown className="w-4 h-4" />
               {/* Underline for active state */}
               {isActive && (
-                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-bara-500 rounded-full" />
+                <motion.span 
+                  layoutId="desktop-underline"
+                  className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-bara-500 rounded-full"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: 1, scaleX: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
               )}
             </button>
             
@@ -199,7 +302,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                     <Link
                       key={child.href}
                       href={child.href}
-                      onClick={handleLinkClick}
+                      onClick={(e) => handleLinkClick(child, e)}
                       className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                       {child.label}
@@ -212,7 +315,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
         ) : (
           <Link
             href={href}
-            onClick={handleLinkClick}
+            onClick={(e) => handleLinkClick(item, e)}
             className={cn(
               'font-medium transition-all duration-200 px-3 py-2 rounded-lg block relative',
               'focus:outline-none focus:ring-2 focus:ring-primary/20',
@@ -225,9 +328,15 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
             )}
           >
             {item.label}
-            {/* Underline for active state */}
+            {/* Animated underline for active state */}
             {isActive && (
-              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-bara-500 rounded-full" />
+              <motion.span 
+                layoutId="desktop-underline"
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-bara-500 rounded-full"
+                initial={{ opacity: 0, scaleX: 0 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.3 }}
+              />
             )}
           </Link>
         )}
@@ -276,7 +385,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                       <Link
                         key={child.href}
                         href={child.href}
-                        onClick={handleLinkClick}
+                        onClick={(e) => handleLinkClick(child, e)}
                         className="block p-2 text-sm text-gray-600 hover:text-bara-600 transition-colors"
                       >
                         {child.label}
@@ -290,15 +399,25 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
         ) : (
           <Link
             href={href}
-            onClick={handleLinkClick}
+            onClick={(e) => handleLinkClick(item, e)}
             className={cn(
-              'block p-3 font-medium rounded-lg transition-colors',
+              'block p-3 font-medium rounded-lg transition-colors relative',
               isActive
                 ? 'text-bara-600 bg-bara-50'
                 : 'text-gray-700 hover:bg-bara-50 hover:text-bara-600'
             )}
           >
             {item.label}
+            {/* Mobile active indicator */}
+            {isActive && (
+              <motion.div 
+                layoutId="mobile-indicator"
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-bara-500 rounded-r"
+                initial={{ opacity: 0, scaleY: 0 }}
+                animate={{ opacity: 1, scaleY: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            )}
           </Link>
         )}
       </div>
@@ -454,7 +573,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                 <Button
                   asChild
                   className="w-full bg-bara-500 hover:bg-bara-600 text-white"
-                  onClick={handleLinkClick}
+                  onClick={(e) => handleLinkClick({ href: '/kontak', label: 'Hubungi Kami' }, e)}
                 >
                   <Link href="/kontak">
                     Hubungi Kami
