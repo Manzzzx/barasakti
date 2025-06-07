@@ -16,7 +16,7 @@ export const COMPANY_INFO: CompanyInfo = {
   phone: '+62 831-9244-3183',
   name: 'Bara Sakti',
   tagline: 'Arang Briket Berkualitas dari Brebes',
-  description: 'Barasakti adalah usaha keluarga yang memproduksi arang briket berkualitas dari tempurung kelapa. Kami melayani kebutuhan BBQ, shisha, dan rumah tangga dengan harga terjangkau dan kualitas terjamin.',
+  description: 'Barasakti adalah usaha keluarga yang memproduksi arang briket berkualitas dari tempurung kelapa. Kami melayani kebutuhan BBQ, dan rumah tangga dengan harga terjangkau dan kualitas terjamin.',
   address: {
     street: 'Jl. Imam Bonjol No.35, Canting, Klampok, Kec. Wanasari',
     city: 'Brebes',
@@ -57,33 +57,24 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     icon: 'Home'
   },
   {
-    label: 'Produk',
-    href: '/produk',
-    icon: 'Package',
-    children: [
-      {
-        label: 'BBQ Premium',
-        href: '/produk/bbq-premium'
-      },
-      {
-        label: 'Shisha & Hookah',
-        href: '/produk/shisha-hookah'
-      },
-      {
-        label: 'Warung & Usaha Kecil',
-        href: '/produk/warung-usaha-kecil'
-      }
-    ]
-  },
-  {
     label: 'Tentang Kami',
     href: '/tentang',
     icon: 'Info'
   },
   {
+    label: 'Gallery',
+    href: '/gallery',
+    icon: 'Image'
+  },
+  {
     label: 'Blog',
     href: '/blog',
     icon: 'BookOpen'
+  },
+  {
+    label: 'FAQ',
+    href: '/faq',
+    icon: 'QuestionMarkCircle',
   },
   {
     label: 'Kontak',
@@ -112,31 +103,6 @@ export const SEO_DEFAULTS = {
   url: 'https://barasakti.com',
   type: 'website' as const
 };
-
-// Pricing Tiers untuk B2B/B2C
-export const PRICING_TIERS = {
-  retail: {
-    name: 'Eceran',
-    description: 'Harga untuk pembelian satuan',
-    minQuantity: 1,
-    badge: 'Retail',
-    color: 'bara-500'
-  },
-  wholesale: {
-    name: 'Grosir',
-    description: 'Harga khusus untuk pembelian grosir',
-    minQuantity: 10,
-    badge: 'Wholesale',
-    color: 'eco-500'
-  },
-  bulk: {
-    name: 'Bulk Order',
-    description: 'Harga terbaik untuk volume besar',
-    minQuantity: 50,
-    badge: 'Bulk',
-    color: 'premium-600'
-  }
-} as const;
 
 // Contact Form Options
 export const INQUIRY_TYPES = [
@@ -272,12 +238,10 @@ export const PERFORMANCE_CONFIG = {
 
 // Image Paths Configuration
 export const IMAGE_PATHS = {
-  products: '/images/products',
   gallery: '/images/gallery',
   blog: '/images/blog',
   icons: '/icons',
   placeholders: {
-    product: '/images/placeholders/product-placeholder.jpg',
     avatar: '/images/placeholders/avatar-placeholder.jpg',
     blog: '/images/placeholders/blog-placeholder.jpg'
   }

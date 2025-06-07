@@ -132,7 +132,8 @@ Please describe what you were doing when this error occurred:
             </h1>
             
             <p className="text-gray-600 mb-6">
-              Seperti bara yang perlu dinyalakan kembali, website kami mengalami gangguan sementara. Tim Bara Sakti sedang memperbaikinya.
+              Seperti bara yang perlu dinyalakan kembali, website kami mengalami gangguan sementara.
+              Kami akan segera memperbaikinya.
             </p>
 
             {/* Error details untuk development */}
@@ -209,7 +210,7 @@ export default ErrorBoundary;
 
 // Hook untuk functional components
 export const useErrorHandler = () => {
-  return (error: Error, errorInfo?: ErrorInfo) => {
+  return (error: Error) => {
     // Throw error untuk ditangkap oleh ErrorBoundary
     throw error;
   };

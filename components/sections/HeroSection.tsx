@@ -143,49 +143,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
               size="lg"
               className="bg-bara-500 hover:bg-bara-600 text-white px-8 py-4 text-lg font-semibold group"
             >
-              <Link href="/produk">
-                Lihat Produk
+              <Link href="#gallery">
+                Lihat Selengkapnya
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            
-            {/* <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="border-eco/30 text-eco-500 hover:bg-white/10 px-8 py-4 text-lg font-semibold backdrop-blur-sm"
-            >
-              <Link href={`https://wa.me/${COMPANY_INFO.contact.whatsapp.replace(/[^0-9]/g, '')}`}>
-                <Phone className="mr-2 w-5 h-5" />
-                Hubungi Kami
-              </Link>
-            </Button> */}
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      {/* <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-      >
-        <div className="flex flex-col items-center text-white/70">
-          <span className="text-sm mb-2">Scroll untuk melihat lebih</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
-          >
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="w-1 h-3 bg-white/50 rounded-full mt-2"
-            />
-          </motion.div>
-        </div>
-      </motion.div> */}
     </section>
   );
 };

@@ -88,11 +88,11 @@ const NotFound = () => {
 
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
             <Link 
-              href="/produk"
+              href="/gallery"
               className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg border border-gray-600 transition-colors duration-200"
             >
               <span className="flex items-center justify-center text-sm">
-                🔥 Produk Briket
+                🔥 Gallery
               </span>
             </Link>
             <Link 

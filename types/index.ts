@@ -11,14 +11,6 @@
  * @version 1.0.0
  */
 
-// Product related types
-export type {
-  Product,
-  ProductCategory,
-  ProductFilter,
-  CartItem
-} from './product';
-
 // API related types
 export type {
   ApiResponse,

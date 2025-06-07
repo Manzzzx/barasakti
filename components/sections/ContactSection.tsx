@@ -1,14 +1,12 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Phone, MapPin, Clock, ExternalLink, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { COMPANY_INFO, ANIMATION_VARIANTS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import ContactForm from '@/components/features/ContactForm';
 
 interface ContactSectionProps {
   className?: string;
@@ -22,134 +20,182 @@ interface ContactInfo {
   content: string;
   href?: string;
   color: string;
+  description?: string;
 }
+
+// Map component with error handling and loading state
+const GoogleMapEmbed: React.FC<{ className?: string }> = ({ className }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
+
+  const handleError = useCallback(() => {
+    setHasError(true);
+    setIsLoaded(true);
+  }, []);
+
+  if (hasError) {
+    return (
+      <Card className={cn("h-80", className)}>
+        <CardContent className="h-full flex items-center justify-center p-6">
+          <div className="text-center">
+            <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600 mb-4">Peta tidak dapat dimuat</p>
+            <Button
+              variant="outline"
+              onClick={() => window.open('https://maps.google.com/?q=Bara+Sakti+Briket', '_blank')}
+              className="gap-2"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Buka di Google Maps
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className={cn("overflow-hidden", className)}>
+      <CardContent className="p-0 relative">
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center z-10">
+            <div className="text-center">
+              <MapPin className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+              <p className="text-sm text-gray-500">Memuat peta...</p>
+            </div>
+          </div>
+        )}
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d247.57856302035566!2d109.00947900231313!3d-6.859770152579388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6fb1005310e7f3%3A0xa270d98bd9a0a0b3!2sJUAL%20ARANG%20BRIKET%20(BARA%20SAKTI)!5e0!3m2!1sid!2sid!4v1749274810645!5m2!1sid!2sid"
+          width="100%"
+          height="320"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          onLoad={handleLoad}
+          onError={handleError}
+          title="Lokasi Bara Sakti - Jual Arang Briket"
+          className="w-full"
+        />
+      </CardContent>
+    </Card>
+  );
+};
 
 const ContactSection: React.FC<ContactSectionProps> = ({
   className = '',
-  showForm = true,
-  variant = 'default'
 }) => {
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-
-  // Memoized contact information to prevent unnecessary re-renders
+  // Memoized contact information with enhanced data and error handling
   const contactInfo = useMemo((): ContactInfo[] => {
-    // Safe access to company info with fallbacks
+    // Safe access to company info with comprehensive fallbacks
     const safeCompanyInfo = {
       contact: {
-        phone: COMPANY_INFO?.contact?.phone || 'Tidak tersedia',
-        email: COMPANY_INFO?.contact?.email || 'Tidak tersedia'
+        phone: COMPANY_INFO?.contact?.phone || '+62 812-XXXX-XXXX',
+        email: COMPANY_INFO?.contact?.email || 'info@barasakti.com'
       },
       address: {
-        street: COMPANY_INFO?.address?.street || '',
-        city: COMPANY_INFO?.address?.city || '',
-        province: COMPANY_INFO?.address?.province || '',
-        postalCode: COMPANY_INFO?.address?.postalCode || ''
+        street: COMPANY_INFO?.address?.street || 'Jl. Contoh No. 123',
+        city: COMPANY_INFO?.address?.city || 'Brebes',
+        province: COMPANY_INFO?.address?.province || 'Jawa Tengah',
+        postalCode: COMPANY_INFO?.address?.postalCode || '52212'
       },
       businessHours: {
-        weekdays: COMPANY_INFO?.businessHours?.weekdays || 'Senin - Jumat: 08:00 - 17:00',
-        weekend: COMPANY_INFO?.businessHours?.weekend || 'Sabtu: 08:00 - 15:00'
+        weekdays: COMPANY_INFO?.businessHours?.weekdays || 'Senin - Jumat: 09:00 - 16:00',
+        weekend: COMPANY_INFO?.businessHours?.weekend || 'Sabtu: 09:00 - 16:00'
       }
     };
+
+    const fullAddress = [
+      safeCompanyInfo.address.street,
+      safeCompanyInfo.address.city,
+      safeCompanyInfo.address.province,
+      safeCompanyInfo.address.postalCode
+    ].filter(Boolean).join(', ');
 
     return [
       {
         icon: Phone,
         title: 'Telepon',
         content: safeCompanyInfo.contact.phone,
-        href: `tel:${safeCompanyInfo.contact.phone.replace(/\s+/g, '')}`,
-        color: 'text-bara-600'
-      },
-      {
-        icon: Mail,
-        title: 'Email',
-        content: safeCompanyInfo.contact.email,
-        href: `mailto:${safeCompanyInfo.contact.email}`,
-        color: 'text-eco-600'
+        description: 'Hubungi kami untuk konsultasi dan pemesanan',
+        href: `tel:${safeCompanyInfo.contact.phone.replace(/[\s-]/g, '')}`,
+        color: 'text-blue-600'
       },
       {
         icon: MapPin,
         title: 'Alamat',
-        content: `${safeCompanyInfo.address.street}, ${safeCompanyInfo.address.city}, ${safeCompanyInfo.address.province} ${safeCompanyInfo.address.postalCode}`.trim(),
-        href: `https://maps.google.com/?q=${encodeURIComponent(`${safeCompanyInfo.address.street}, ${safeCompanyInfo.address.city}`)}`,
-        color: 'text-premium-600'
+        content: fullAddress,
+        description: 'Kunjungi toko kami untuk melihat produk langsung',
+        color: 'text-red-600'
       },
       {
         icon: Clock,
         title: 'Jam Operasional',
-        content: `${safeCompanyInfo.businessHours.weekdays} | ${safeCompanyInfo.businessHours.weekend}`,
-        color: 'text-green-600'
+        content: `${safeCompanyInfo.businessHours.weekdays}\n${safeCompanyInfo.businessHours.weekend}`,
+        description: 'Kami siap melayani sesuai jam operasional',
+        color: 'text-amber-600'
       }
     ];
   }, []);
 
-  // Handle form submission with proper error handling
-  const handleFormSubmit = useCallback(async (data: any) => {
-    try {
-      setSubmitError(null);
-      
-      // Simulate API call - replace with actual implementation
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      
-      if (result.success) {
-        setFormSubmitted(true);
-        // Reset form after 5 seconds
-        setTimeout(() => {
-          setFormSubmitted(false);
-        }, 5000);
-      } else {
-        throw new Error(result.message || 'Gagal mengirim pesan');
-      }
-    } catch (error) {
-      console.error('Contact form submission error:', error);
-      setSubmitError(
-        error instanceof Error 
-          ? error.message 
-          : 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.'
-      );
-    }
-  }, []);
-
-  const isCompact = variant === 'compact';
+  // WhatsApp message generator with URL encoding
+  const generateWhatsAppLink = useCallback(() => {
+    const message = encodeURIComponent(
+      'Halo Bara Sakti! Saya tertarik dengan produk briket kelapa Anda. Bisakah saya mendapat informasi lebih lanjut mengenai harga dan cara pemesanan?'
+    );
+    const phoneNumber = contactInfo[0]?.content?.replace(/[\s-+]/g, '') || '6281234567890';
+    return `https://wa.me/${phoneNumber.startsWith('62') ? phoneNumber : '62' + phoneNumber}?text=${message}`;
+  }, [contactInfo]);
 
   return (
-    <section className={cn('py-16 bg-gray-50', className)}>
-      <div className="container mx-auto px-4">
-        {/* Section Header */}
+    <section className={cn('py-16 lg:py-24 bg-gradient-to-br from-gray-50 to-gray-100', className)}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Enhanced Section Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
           variants={ANIMATION_VARIANTS.fadeIn}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <Badge className="bg-premium-100 text-premium-700 mb-4">
+          <motion.h2 
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
+            variants={ANIMATION_VARIANTS.slideUp}
+          >
             Hubungi Kami
-          </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Hubungi Kami
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Siap melayani kebutuhan briket kelapa berkualitas untuk rumah, warung, dan usaha kecil Anda. Konsultasi gratis!
-          </p>
+          </motion.h2>
+          <motion.p 
+            className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+            variants={ANIMATION_VARIANTS.slideUp}
+          >
+            Siap melayani kebutuhan briket kelapa berkualitas untuk rumah, warung, dan usaha Anda. 
+            <span className="text-bara-600 font-semibold"> Konsultasi gratis!</span>
+          </motion.p>
+          
+          {/* Quick CTA */}
+          <motion.div
+            variants={ANIMATION_VARIANTS.slideUp}
+            className="mt-8"
+          >
+            <Button
+              asChild
+              size="lg"
+              className="bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 gap-2"
+            >
+              <a href={generateWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="w-5 h-5" />
+                Chat WhatsApp Sekarang
+              </a>
+            </Button>
+          </motion.div>
         </motion.div>
 
-        <div className={cn(
-          'grid gap-12 items-start',
-          showForm && !isCompact ? 'lg:grid-cols-2' : 'lg:grid-cols-1 max-w-4xl mx-auto'
-        )}>
+        <div className="grid lg:grid-cols-2 gap-12 xl:gap-16 items-start">
           {/* Contact Information */}
           <motion.div
             initial="hidden"
@@ -162,22 +208,28 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon;
                 const content = (
-                  <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
+                  <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-md">
+                    <CardContent className="p-6 sm:p-8">
+                      <div className="flex items-start space-x-6">
                         <div className={cn(
-                          'w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0',
-                          'bg-gray-100 group-hover:bg-gray-200 transition-colors'
+                          'w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0',
+                          'bg-gradient-to-br from-white to-gray-50 group-hover:from-gray-50 group-hover:to-gray-100',
+                          'shadow-sm group-hover:shadow-md transition-all duration-300'
                         )}>
-                          <IconComponent className={cn('w-6 h-6', info.color)} />
+                          <IconComponent className={cn('w-7 h-7', info.color)} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-gray-900 mb-1">
+                          <h3 className="font-bold text-gray-900 mb-2 text-lg">
                             {info.title}
                           </h3>
-                          <p className="text-gray-600 break-words">
+                          <p className="text-gray-800 mb-2 whitespace-pre-line font-medium">
                             {info.content}
                           </p>
+                          {info.description && (
+                            <p className="text-sm text-gray-600 leading-relaxed">
+                              {info.description}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -186,7 +238,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
 
                 return (
                   <motion.div
-                    key={index}
+                    key={`contact-${index}-${info.title}`}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -194,7 +246,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                       ...ANIMATION_VARIANTS.slideUp,
                       visible: {
                         ...ANIMATION_VARIANTS.slideUp.visible,
-                        transition: { delay: index * 0.1, duration: 0.6 }
+                        transition: { delay: index * 0.15, duration: 0.8 }
                       }
                     }}
                   >
@@ -203,7 +255,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                         href={info.href}
                         target={info.href.startsWith('http') ? '_blank' : undefined}
                         rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="block"
+                        className="block focus:outline-none focus:ring-2 focus:ring-bara-500 focus:ring-offset-2 rounded-lg"
+                        aria-label={`${info.title}: ${info.content}`}
                       >
                         {content}
                       </a>
@@ -214,101 +267,42 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                 );
               })}
             </div>
-
-            {/* Quick Actions */}
-            {!isCompact && (
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={ANIMATION_VARIANTS.fadeIn}
-                className="pt-6"
-              >
-                <h3 className="font-semibold text-gray-900 mb-4">Hubungi Langsung</h3>
-                <div className="flex flex-wrap gap-3">
-                  <Button
-                    asChild
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    <a
-                      href={`https://wa.me/6281234567890?text=Halo%20Bara%20Sakti,%20saya%20tertarik%20dengan%20produk%20briket%20kelapa%20Anda`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      WhatsApp
-                    </a>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="border-bara-500 text-bara-500 hover:bg-bara-50"
-                  >
-                    <a href={`tel:${COMPANY_INFO?.contact?.phone?.replace(/\s+/g, '') || ''}`}>
-                      Telepon Langsung
-                    </a>
-                  </Button>
-                </div>
-              </motion.div>
-            )}
           </motion.div>
 
-          {/* Contact Form */}
-          {showForm && (
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-50px' }}
-              variants={ANIMATION_VARIANTS.slideInRight}
-            >
-              <Card className="shadow-xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-gray-900">
-                    Pesan Sekarang
-                  </CardTitle>
-                  <p className="text-gray-600">
-                    Isi form di bawah ini dan kami akan segera menghubungi Anda.
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  {formSubmitted ? (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="text-center py-8"
-                    >
-                      <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        Pesan Terkirim!
-                      </h3>
-                      <p className="text-gray-600">
-                        Terima kasih atas pesan Anda. Kami akan segera menghubungi Anda.
-                      </p>
-                    </motion.div>
-                  ) : (
-                    <>
-                      {submitError && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3"
-                        >
-                          <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
-                          <div>
-                            <p className="text-red-800 font-medium">Gagal mengirim pesan</p>
-                            <p className="text-red-600 text-sm">{submitError}</p>
-                          </div>
-                        </motion.div>
-                      )}
-                      <ContactForm
-                        onSubmit={handleFormSubmit}
-                        className="space-y-6"
-                      />
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
+          {/* Map Section */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={ANIMATION_VARIANTS.slideInRight}
+            className="space-y-6"
+          >
+            <div className="text-center lg:text-left">
+              <h3 className="font-bold text-gray-900 mb-4 text-xl">Lokasi Kami</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Temukan lokasi toko kami dengan mudah. Kami berlokasi strategis dan mudah dijangkau 
+                dengan kendaraan pribadi maupun transportasi umum.
+              </p>
+            </div>
+            
+            <GoogleMapEmbed className="h-80" />
+            
+            {/* Additional location info */}
+            <Card className="bg-gradient-to-r from-bara-50 to-eco-50 border-0">
+              <CardContent className="p-6">
+                <div className="flex items-start space-x-4">
+                  <MapPin className="w-6 h-6 text-bara-600 flex-shrink-0 mt-1" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Mudah Ditemukan</h4>
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      Lokasi kami berada di area yang mudah diakses. 
+                      Cari papan nama BARA SAKTI di pinggir jalan.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,20 +1,13 @@
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
 // Components
 import ErrorBoundary from '@/components/common/ErrorBoundary';
-import Loading from '@/components/common/Loading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Constants
 import { COMPANY_INFO } from '@/lib/constants';
-
-// Dynamic imports
-const ContactForm = dynamic(() => import('@/components/features/ContactForm'), {
-  loading: () => <Loading variant="skeleton" />,
-});
 
 const FadeIn = dynamic(() => import('@/components/animations/FadeIn'), {
   loading: () => <div className="opacity-0" />,
@@ -94,10 +87,6 @@ const faqs = [
     answer: 'Ya, untuk wilayah Brebes dan sekitarnya kami melayani COD dengan minimal pembelian 20 kg.',
   },
   {
-    question: 'Bagaimana cara menjadi reseller?',
-    answer: 'Silakan hubungi kami langsung via WhatsApp untuk informasi program reseller dan harga khusus.',
-  },
-  {
     question: 'Apakah ada garansi kualitas?',
     answer: 'Ya, jika produk tidak sesuai dengan deskripsi atau rusak saat pengiriman, kami akan mengganti.',
   },
@@ -147,7 +136,11 @@ export default function ContactPage() {
                     </CardHeader>
                     <CardContent className="text-center">
                       <p className="text-gray-600 text-sm mb-3">{method.description}</p>
-                      <p className="font-medium text-blue-600 break-words">{method.value}</p>
+                      <p className="font-medium text-blue-600 break-words">
+                        {typeof method.value === 'object' 
+                          ? `${method.value.street}, ${method.value.city}, ${method.value.province} ${method.value.postalCode}, ${method.value.country}`
+                          : method.value}
+                      </p>
                     </CardContent>
                   </Card>
                 </FadeIn>
@@ -166,11 +159,6 @@ export default function ContactPage() {
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">
                     Kirim Pesan
                   </h3>
-                  <Suspense fallback={<Loading type="skeleton" />}>
-                    <ErrorBoundary fallback={<div className="text-center text-gray-500 py-8">Gagal memuat form kontak</div>}>
-                      <ContactForm />
-                    </ErrorBoundary>
-                  </Suspense>
                 </div>
               </FadeIn>
               
@@ -226,7 +214,8 @@ export default function ContactPage() {
                         className="w-full justify-start" 
                         variant="outline"
                         onClick={() => {
-                          const encodedAddress = encodeURIComponent(COMPANY_INFO.address);
+                          const fullAddress = `${COMPANY_INFO.address.street}, ${COMPANY_INFO.address.city}, ${COMPANY_INFO.address.province} ${COMPANY_INFO.address.postalCode}, ${COMPANY_INFO.address.country}`;
+                          const encodedAddress = encodeURIComponent(fullAddress);
                           window.open(`https://maps.google.com/maps?q=${encodedAddress}`, '_blank');
                         }}
                       >
