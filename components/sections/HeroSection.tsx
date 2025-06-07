@@ -143,7 +143,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = '' }) => {
               size="lg"
               className="bg-bara-500 hover:bg-bara-600 text-white px-8 py-4 text-lg font-semibold group"
             >
-              <Link href="#gallery">
+              <Link href="/gallery">
                 Lihat Selengkapnya
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>

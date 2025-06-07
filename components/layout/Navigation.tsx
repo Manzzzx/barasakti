@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Phone, Mail, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { COMPANY_INFO, NAVIGATION_ITEMS, ANIMATION_VARIANTS } from '@/lib/constants';
 import { NavigationItem } from '@/types';
 import { cn } from '@/lib/utils';
+import { useScrollPosition } from '@/hooks/useScrollPosition';
 
 interface NavigationProps {
   className?: string;
@@ -19,16 +21,49 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string>('hero');
+  
+  const pathname = usePathname();
+  const { y: scrollY } = useScrollPosition({ throttleMs: 50 });
 
   // Handle scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    setIsScrolled(scrollY > 50);
+  }, [scrollY]);
+
+  // Handle active section detection for home page
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    const sections = [
+      { id: 'hero', element: document.getElementById('hero') },
+      { id: 'tentang', element: document.getElementById('tentang') },
+      { id: 'galeri', element: document.getElementById('galeri') },
+      { id: 'kontak', element: document.getElementById('kontak') }
+    ];
+
+    const handleSectionDetection = () => {
+      const scrollPosition = window.scrollY + 100; // Offset for better UX
+      
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section.element) {
+          const sectionTop = section.element.offsetTop;
+          if (scrollPosition >= sectionTop) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Initial check
+    handleSectionDetection();
+    
+    // Add scroll listener
+    window.addEventListener('scroll', handleSectionDetection, { passive: true });
+    return () => window.removeEventListener('scroll', handleSectionDetection);
+  }, [pathname]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -69,10 +104,55 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
     setOpenDropdown(null);
   };
 
+  // Function to determine if navigation item is active
+  const isNavigationActive = (item: NavigationItem): boolean => {
+    // For separate pages (blog, FAQ, etc.)
+    if (pathname !== '/') {
+      return pathname === item.href || pathname.startsWith(item.href + '/');
+    }
+
+    // For home page sections
+    switch (item.href) {
+      case '/':
+        return activeSection === 'hero';
+      case '/tentang':
+        return activeSection === 'tentang';
+      case '/gallery':
+        return activeSection === 'galeri';
+      case '/kontak':
+        return activeSection === 'kontak';
+      default:
+        return false;
+    }
+  };
+
+  // Function to get section href for home page
+  const getSectionHref = (item: NavigationItem): string => {
+    if (pathname !== '/') {
+      return item.href;
+    }
+
+    // For home page, convert to section anchors
+    switch (item.href) {
+      case '/':
+        return '#hero';
+      case '/tentang':
+        return '#tentang';
+      case '/gallery':
+        return '#galeri';
+      case '/kontak':
+        return '#kontak';
+      default:
+        return item.href;
+    }
+  };
+
   // Desktop Navigation Item Component
   const DesktopNavigationItem = ({ item }: { item: NavigationItem }) => {
     const hasChildren = item.children && item.children.length > 0;
     const isDropdownOpen = openDropdown === item.label;
+    const isActive = isNavigationActive(item);
+    const href = getSectionHref(item);
 
     return (
       <div className="relative group">
@@ -83,19 +163,28 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
               onMouseEnter={() => setOpenDropdown(item.label)}
               onMouseLeave={() => setOpenDropdown(null)}
               className={cn(
-                'flex items-center gap-1 font-medium transition-colors hover:text-bara-500',
-                'focus:outline-none focus:ring-2 focus:ring-primary/20 rounded px-2 py-1',
-                isScrolled ? 'text-gray-700' : 'text-white'
+                'flex items-center gap-1 font-medium transition-all duration-200 px-3 py-2 rounded-lg relative',
+                'focus:outline-none focus:ring-2 focus:ring-primary/20',
+                'hover:bg-white/10',
+                isActive
+                  ? 'text-bara-500'
+                  : isScrolled 
+                    ? 'text-gray-700 hover:text-bara-600' 
+                    : 'text-white hover:text-bara-300'
               )}
               aria-expanded={isDropdownOpen}
               aria-haspopup="true"
             >
               {item.label}
               <ChevronDown className="w-4 h-4" />
+              {/* Underline for active state */}
+              {isActive && (
+                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-bara-500 rounded-full" />
+              )}
             </button>
             
             {/* Desktop Dropdown */}
-            {/* <AnimatePresence>
+            <AnimatePresence>
               {isDropdownOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
@@ -118,19 +207,28 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                   ))}
                 </motion.div>
               )}
-            </AnimatePresence> */}
+            </AnimatePresence>
           </>
         ) : (
           <Link
-            href={item.href}
+            href={href}
             onClick={handleLinkClick}
             className={cn(
-              'font-medium transition-colors hover:text-bara-500 px-2 py-1 rounded',
+              'font-medium transition-all duration-200 px-3 py-2 rounded-lg block relative',
               'focus:outline-none focus:ring-2 focus:ring-primary/20',
-              isScrolled ? 'text-gray-700' : 'text-white'
+              'hover:bg-white/10',
+              isActive
+                ? 'text-bara-500'
+                : isScrolled 
+                  ? 'text-gray-700 hover:text-bara-600' 
+                  : 'text-white hover:text-bara-300'
             )}
           >
             {item.label}
+            {/* Underline for active state */}
+            {isActive && (
+              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-bara-500 rounded-full" />
+            )}
           </Link>
         )}
       </div>
@@ -141,6 +239,8 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
   const MobileNavigationItem = ({ item }: { item: NavigationItem }) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.includes(item.href);
+    const isActive = isNavigationActive(item);
+    const href = getSectionHref(item);
 
     return (
       <div key={item.href}>
@@ -148,7 +248,12 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
           <>
             <button
               onClick={() => toggleExpanded(item.href)}
-              className="w-full flex items-center justify-between p-3 text-left font-medium text-gray-700 hover:bg-bara-50 hover:text-bara-600 rounded-lg transition-colors"
+              className={cn(
+                'w-full flex items-center justify-between p-3 text-left font-medium rounded-lg transition-colors',
+                isActive
+                  ? 'text-bara-600 bg-bara-50'
+                  : 'text-gray-700 hover:bg-bara-50 hover:text-bara-600'
+              )}
             >
               {item.label}
               <ChevronDown
@@ -184,9 +289,14 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
           </>
         ) : (
           <Link
-            href={item.href}
+            href={href}
             onClick={handleLinkClick}
-            className="block p-3 font-medium text-gray-700 hover:bg-bara-50 hover:text-bara-600 rounded-lg transition-colors"
+            className={cn(
+              'block p-3 font-medium rounded-lg transition-colors',
+              isActive
+                ? 'text-bara-600 bg-bara-50'
+                : 'text-gray-700 hover:bg-bara-50 hover:text-bara-600'
+            )}
           >
             {item.label}
           </Link>
@@ -262,7 +372,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-6 py-2 px-4">
+            <div className="hidden lg:flex items-center space-x-2">
               {NAVIGATION_ITEMS.map((item: NavigationItem) => (
                 <DesktopNavigationItem key={item.href} item={item} />
               ))}

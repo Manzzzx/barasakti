@@ -39,7 +39,7 @@ export const galleryItems: GalleryItem[] = [
     id: 'produk-1',
     category: 'produk',
     title: 'Briket Kelapa Premium',
-    description: 'Briket kelapa berkualitas tinggi untuk BBQ dan shisha',
+    description: 'Briket kelapa berkualitas tinggi untuk BBQ',
     image: '/images/gallery/produk-1.jpg',
     alt: 'Briket kelapa premium Barasakti'
   },

@@ -67,16 +67,6 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     icon: 'Image'
   },
   {
-    label: 'Blog',
-    href: '/blog',
-    icon: 'BookOpen'
-  },
-  {
-    label: 'FAQ',
-    href: '/faq',
-    icon: 'QuestionMarkCircle',
-  },
-  {
     label: 'Kontak',
     href: '/kontak',
     icon: 'Phone'

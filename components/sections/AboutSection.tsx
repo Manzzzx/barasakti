@@ -1,37 +1,23 @@
-'use client';
+'use client'
 
-import React, { useState, useCallback, useMemo, ErrorInfo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Award, Users, Leaf, Target, AlertTriangle, Shield, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { COMPANY_INFO, ANIMATION_VARIANTS } from '@/lib/constants';
-import { cn } from '@/lib/utils';
+import { 
+  Award, 
+  Users, 
+  Leaf, 
+  Target, 
+  AlertTriangle,  
+  Heart,
+  Zap,
+  CheckCircle,
+  Star,
+  TrendingUp,
+  Sparkles
+} from 'lucide-react';
 
-interface AboutSectionProps {
-  className?: string;
-  variant?: 'default' | 'compact';
-}
-
-interface StatItem {
-  icon: React.ComponentType<{ className?: string }>;
-  value: number;
-  suffix: string;
-  label: string;
-  color: string;
-  description?: string;
-}
-
-interface ValueItem {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-  color: string;
-}
-
-// Custom Error Boundary Component
+// Enhanced Error Boundary with better error handling
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode; fallback?: React.ReactNode },
   { hasError: boolean; error?: Error }
@@ -45,7 +31,7 @@ class ErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('AboutSection Error:', error, errorInfo);
   }
 
@@ -60,48 +46,94 @@ class ErrorBoundary extends React.Component<
         </div>
       );
     }
-
     return this.props.children;
   }
 }
 
-// CountUp Component
-const CountUp: React.FC<{ end: number; duration?: number }> = ({ end, duration = 2 }) => {
+// Enhanced CountUp Component with better performance
+const CountUp: React.FC<{ end: number; duration?: number; suffix?: string }> = ({ 
+  end, 
+  duration = 2,
+  suffix = ''
+}) => {
   const [count, setCount] = useState(0);
 
   React.useEffect(() => {
-    const startTime = Date.now();
-    const endTime = startTime + duration * 1000;
+    let startTime: number;
+    let animationFrame: number;
 
-    const updateCount = () => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime) / (endTime - startTime), 1);
-      const currentCount = Math.floor(progress * end);
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
       
-      setCount(currentCount);
-
+      setCount(Math.floor(progress * end));
+      
       if (progress < 1) {
-        requestAnimationFrame(updateCount);
+        animationFrame = requestAnimationFrame(animate);
       }
     };
 
-    const timer = setTimeout(updateCount, 100);
-    return () => clearTimeout(timer);
+    animationFrame = requestAnimationFrame(animate);
+    
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
   }, [end, duration]);
 
-  return <span>{count}</span>;
+  return <span>{count}{suffix}</span>;
 };
 
-const AboutSection: React.FC<AboutSectionProps> = ({
-  className = '',
-  variant = 'default'
-}) => {
+// Animation variants
+const ANIMATION_VARIANTS = {
+  fadeIn: {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  },
+  slideUp: {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  },
+  slideInLeft: {
+    hidden: { opacity: 0, x: -50 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  },
+  slideInRight: {
+    hidden: { opacity: 0, x: 50 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  },
+  stagger: {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+};
+
+const AboutSection: React.FC = () => {
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
-  // Enhanced image error handling with retry mechanism
-  const handleImageError = useCallback((error?: Event) => {
-    console.error('Failed to load about section image:', error);
+  // Enhanced image error handling
+  const handleImageError = useCallback(() => {
     setImageError(true);
     setImageLoading(false);
   }, []);
@@ -110,279 +142,312 @@ const AboutSection: React.FC<AboutSectionProps> = ({
     setImageLoading(false);
   }, []);
 
-  // Enhanced statistics with more detailed information
-  const stats = useMemo<StatItem[]>(() => [
+  // Realistic stats for new business
+  const stats = useMemo(() => [
     {
-      icon: Users,
-      value: 500,
-      suffix: '+',
-      label: 'Pelanggan Setia',
-      description: 'Rumah tangga dan UMKM',
-      color: 'text-blue-600'
-    },
-    {
-      icon: Award,
-      value: 8,
+      icon: Sparkles,
+      value: 2025,
       suffix: '',
-      label: 'Tahun Pengalaman',
-      description: 'Melayani dengan dedikasi',
-      color: 'text-amber-600'
+      label: 'Tahun Berdiri',
+      description: 'Memulai dengan semangat baru',
+      color: 'text-blue-600',
+      bgColor: 'from-blue-50 to-blue-100'
     },
     {
       icon: Target,
-      value: 98,
+      value: 100,
       suffix: '%',
-      label: 'Kepuasan Pelanggan',
-      description: 'Berdasarkan survei',
-      color: 'text-green-600'
+      label: 'Komitmen Kualitas',
+      description: 'Tanpa kompromi',
+      color: 'text-green-600',
+      bgColor: 'from-green-50 to-green-100'
+    },
+    {
+      icon: Users,
+      value: 50,
+      suffix: '+',
+      label: 'Pelanggan Happy',
+      description: 'Dan terus bertambah',
+      color: 'text-purple-600',
+      bgColor: 'from-purple-50 to-purple-100'
     },
     {
       icon: Leaf,
       value: 100,
       suffix: '%',
       label: 'Ramah Lingkungan',
-      description: 'Bahan baku alami',
-      color: 'text-emerald-600'
+      description: 'Dari tempurung kelapa',
+      color: 'text-emerald-600',
+      bgColor: 'from-emerald-50 to-emerald-100'
     }
   ], []);
 
-  // Enhanced values with icons and better descriptions
-  const values = useMemo<ValueItem[]>(() => [
+  // Enhanced company values
+  const values = useMemo(() => [
     {
       icon: Award,
       title: 'Kualitas Premium',
-      description: 'Menggunakan 100% tempurung kelapa pilihan dengan proses produksi yang teliti',
-      color: 'text-amber-600'
+      description: 'Meski baru, kami berkomitmen menggunakan 100% tempurung kelapa pilihan dengan proses produksi yang teliti dan modern.',
+      color: 'text-amber-600',
+      bgGradient: 'from-amber-50 to-bara-50',
+      borderColor: 'border-amber-200'
     },
     {
       icon: Leaf,
       title: 'Ramah Lingkungan',
-      description: 'Memanfaatkan limbah tempurung kelapa menjadi produk bernilai tinggi',
-      color: 'text-green-600'
+      description: 'Mengubah limbah tempurung kelapa menjadi energi bersih, berkontribusi untuk lingkungan yang lebih baik.',
+      color: 'text-green-600',
+      bgGradient: 'from-green-50 to-emerald-50',
+      borderColor: 'border-green-200'
     },
     {
       icon: Heart,
-      title: 'Pelayanan Ramah',
-      description: 'Melayani dengan hati dan memberikan konsultasi terbaik untuk kebutuhan Anda',
-      color: 'text-red-600'
+      title: 'Pelayanan Personal',
+      description: 'Sebagai usaha baru, kami memberikan perhatian personal kepada setiap pelanggan dengan layanan yang ramah.',
+      color: 'text-red-600',
+      bgGradient: 'from-red-50 to-pink-50',
+      borderColor: 'border-red-200'
     },
     {
-      icon: Shield,
-      title: 'Harga Terjangkau',
-      description: 'Menawarkan harga yang bersahabat dengan kualitas yang tidak pernah berkompromi',
-      color: 'text-blue-600'
+      icon: TrendingUp,
+      title: 'Inovasi Berkelanjutan',
+      description: 'Generasi baru produsen briket yang terus belajar dan berinovasi untuk memberikan yang terbaik.',
+      color: 'text-blue-600',
+      bgGradient: 'from-blue-50 to-indigo-50',
+      borderColor: 'border-blue-200'
     }
   ], []);
 
-  const isCompact = variant === 'compact';
-
-  // Enhanced image source with multiple fallbacks
-  const imageSrc = useMemo(() => {
-    if (imageError) {
-      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTUwQzIwNiAxNTAgMjEwIDE0NiAyMTAgMTQwVjEyMEMyMTAgMTE0IDE0NiAxMTAgMTQwVjE0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDIwQzIwIDIwIDIwIDIwIDIwIDIwWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4KPC9zdmc+';
-    }
-    return '/images/about-hero.jpg';
-  }, [imageError]);
-
-  // Safe company info access with comprehensive fallbacks
-  const companyInfo = useMemo(() => ({
-    name: COMPANY_INFO?.name || 'Bara Sakti',
-    tagline: COMPANY_INFO?.tagline || 'Arang Briket Berkualitas Premium',
-    description: COMPANY_INFO?.description || 'Produsen arang briket tempurung kelapa berkualitas premium.',
-    location: COMPANY_INFO?.address || 'Brebes, Jawa Tengah'
-  }), []);
-
   return (
     <ErrorBoundary>
-      <section 
-        className={cn('py-16 lg:py-24 bg-gradient-to-br from-white via-gray-50 to-white', className)} 
-        role="region" 
-        aria-labelledby="about-heading"
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Enhanced Section Header */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={ANIMATION_VARIANTS.fadeIn}
-            className="text-center mb-16"
-          >
-            <motion.h2 
-              id="about-heading" 
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6"
-              variants={ANIMATION_VARIANTS.slideUp}
-            >
-              {companyInfo.name}
-            </motion.h2>
-            <motion.p 
-              className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
-              variants={ANIMATION_VARIANTS.slideUp}
-            >
-              {companyInfo.tagline}
-            </motion.p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16 items-center mb-20">
-            {/* Enhanced Content */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-50px' }}
-              variants={ANIMATION_VARIANTS.slideInLeft}
-              className={cn('space-y-8', isCompact && 'lg:order-2')}
-            >
-              <div>
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                  Usaha Arang Briket di {companyInfo.location.city}
-                </h3>
-                <div className="space-y-4 text-gray-600 text-lg leading-relaxed">
-                  <p>
-                    {companyInfo.description}
-                  </p>
-                  <p>
-                    kami telah berkomitmen menghadirkan 
-                    solusi energi alternatif yang berkualitas tinggi, ramah lingkungan, dan 
-                    terjangkau untuk semua kalangan.
-                  </p>
-                  <p className="text-eco-600 font-semibold">
-                    Setiap produk dibuat dengan penuh perhatian untuk memastikan 
-                    kepuasan dan kepercayaan pelanggan.
-                  </p>
-                </div>
-              </div>
-
-              {/* Enhanced Values with Icons */}
-              {!isCompact && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6" role="list" aria-label="Nilai-nilai perusahaan">
-                  {values.map((value, index) => {
-                    const IconComponent = value.icon;
-                    return (
-                      <motion.div
-                        key={`value-${index}-${value.title}`}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        variants={{
-                          hidden: { opacity: 0, y: 20 },
-                          visible: {
-                            opacity: 1,
-                            y: 0,
-                            transition: { delay: index * 0.15, duration: 0.8 }
-                          }
-                        }}
-                        className="group"
-                        role="listitem"
-                      >
-                        <Card className="h-full p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-l-4 border-l-transparent hover:border-l-eco-500">
-                          <CardContent className="p-0">
-                            <div className="flex items-start space-x-4">
-                              <div className={cn(
-                                'w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0',
-                                'bg-gray-100 group-hover:bg-eco-50 transition-colors duration-300'
-                              )}>
-                                <IconComponent className={cn('w-6 h-6', value.color)} aria-hidden="true" />
-                              </div>
-                              <div className="flex-1">
-                                <h4 className="font-bold text-gray-900 mb-2 text-lg group-hover:text-eco-700 transition-colors">
-                                  {value.title}
-                                </h4>
-                                <p className="text-sm text-gray-600 leading-relaxed">
-                                  {value.description}
-                                </p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Enhanced CTA Button */}
-              <motion.div 
-                className="pt-6"
+      <section className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+        {/* Hero Section */}
+        <div className="relative text-black py-24 lg:py-32 overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+            }} />
+          </div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-4xl mx-auto text-center">
+              <motion.div
                 initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
+                animate="visible"
                 variants={ANIMATION_VARIANTS.fadeIn}
               >
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-eco-500 hover:bg-eco-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 group"
+                <motion.h1 
+                  className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+                  variants={ANIMATION_VARIANTS.slideUp}
                 >
-                  <Link href="/tentang" aria-label="Pelajari lebih lanjut tentang Bara Sakti">
-                    Pelajari Lebih Lanjut
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-                  </Link>
-                </Button>
+                  Tentang{' '}
+                  <span className="bg-gradient-to-r from-yellow-500 to-bara-600 bg-clip-text text-transparent">
+                    Barasakti
+                  </span>
+                </motion.h1>
+                
+                <motion.p 
+                  className="text-xl md:text-2xl text-premium-600 leading-relaxed max-w-3xl mx-auto"
+                  variants={ANIMATION_VARIANTS.slideUp}
+                >
+                  Produsen arang briket tempurung kelapa yang baru memulai dengan{' '}
+                  <span className="font-semibold text-premium-800">komitmen kualitas tinggi</span>{' '}
+                  dan semangat untuk memberikan yang terbaik
+                </motion.p>
               </motion.div>
-            </motion.div>
+            </div>
+          </div>
+        </div>
 
-            {/* Enhanced Image with Better Error Handling */}
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-20">
+          {/* Story Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, margin: '-100px' }}
+              variants={ANIMATION_VARIANTS.slideInLeft}
+              className="space-y-8"
+            >
+              <div>
+                <div className="inline-flex items-center gap-2 text-bara-600 font-semibold mb-4">
+                  <Star className="w-5 h-5" />
+                  <span>Cerita Kami</span>
+                </div>
+                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                  Memulai Perjalanan dengan{' '}
+                  <span className="bg-gradient-to-r from-bara-600 to-red-600 bg-clip-text text-transparent">
+                    Semangat Baru
+                  </span>
+                </h2>
+              </div>
+              
+              <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
+                <p>
+                  <strong className="text-gray-900">Barasakti</strong> adalah usaha yang baru memulai perjalanan di tahun 2025. 
+                  Meski masih fresh, kami hadir dengan komitmen kuat untuk menghasilkan arang briket tempurung kelapa 
+                  berkualitas premium dengan standar yang tidak main-main.
+                </p>
+                <p>
+                  Sebagai <span className="font-semibold text-bara-600">generasi baru</span> dalam industri ini, 
+                  kami membawa semangat inovasi dan pelayanan yang lebih personal. Setiap produk dibuat dengan 
+                  perhatian detail dan kualitas yang konsisten.
+                </p>
+                <p className="bg-gradient-to-r from-bara-50 to-red-50 p-6 rounded-xl border-l-4 border-bara-400">
+                  <span className="font-semibold text-bara-800">
+                    &ldquo;Kami percaya bahwa usaha baru bisa memberikan sesuatu yang berbeda -
+                    perhatian lebih, inovasi segar, dan komitmen total untuk kepuasan pelanggan.&rdquo;
+                  </span>
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Enhanced Image Section */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
               variants={ANIMATION_VARIANTS.slideInRight}
-              className={cn('relative', isCompact && 'lg:order-1')}
+              className="relative"
             >
               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
                 {imageLoading && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse flex items-center justify-center" role="img" aria-label="Loading image">
-                    <Leaf className="w-16 h-16 text-gray-400 animate-pulse" aria-hidden="true" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-bara-200 to-red-200 animate-pulse flex items-center justify-center">
+                    <Leaf className="w-16 h-16 text-bara-400 animate-pulse" />
                   </div>
                 )}
                 
                 {!imageError ? (
                   <Image
-                    src={imageSrc}
-                    alt="Bara Sakti - Proses Produksi Briket Kelapa Berkualitas"
+                    src="/images/about-company.jpg"
+                    alt="Fasilitas produksi Barasakti - Arang briket tempurung kelapa berkualitas"
                     fill
-                    className={cn(
-                      'object-cover transition-all duration-500 hover:scale-105',
+                    className={`object-cover transition-all duration-500 hover:scale-105 ${
                       imageLoading ? 'opacity-0' : 'opacity-100'
-                    )}
-                    quality={90}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    }`}
                     onLoad={handleImageLoad}
-                    onError={(e) => handleImageError(e.nativeEvent)}
-                    priority={!isCompact}
+                    onError={handleImageError}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-eco-100 to-eco-200 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-bara-100 to-red-100 flex items-center justify-center">
                     <div className="text-center">
-                      <Leaf className="w-24 h-24 text-eco-400 mx-auto mb-4" />
-                      <p className="text-eco-600 font-semibold text-lg">Bara Sakti</p>
-                      <p className="text-eco-500 text-sm">Briket Kelapa Berkualitas</p>
+                      <Leaf className="w-24 h-24 text-bara-400 mx-auto mb-4" />
+                      <p className="text-bara-600 font-bold text-xl">Barasakti</p>
+                      <p className="text-bara-500">Briket Kelapa Berkualitas</p>
                     </div>
                   </div>
                 )}
                 
-                {/* Enhanced Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" aria-hidden="true" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
+              
+              {/* Floating Stats Card */}
+              <motion.div 
+                className="absolute -bottom-8 -right-8 bg-white rounded-2xl shadow-xl p-6 border border-gray-100"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+              >
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-bara-600 mb-1">2025</div>
+                  <div className="text-sm text-gray-600">Tahun Berdiri</div>
+                </div>
+              </motion.div>
             </motion.div>
           </div>
 
-          {/* Enhanced Statistics */}
-          {!isCompact && (
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-50px' }}
-              variants={ANIMATION_VARIANTS.stagger}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-8"
-              role="region"
-              aria-label="Statistik perusahaan"
-            >
+          {/* Values Section */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={ANIMATION_VARIANTS.fadeIn}
+            className="mb-24"
+          >
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 text-bara-600 font-semibold mb-4">
+                <Heart className="w-5 h-5" />
+                <span>Nilai-Nilai Kami</span>
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Mengapa Memilih{' '}
+                <span className="bg-gradient-to-r from-bara-600 to-red-600 bg-clip-text text-transparent">
+                  Barasakti?
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Meski baru memulai, kami hadir dengan standar tinggi dan komitmen yang tidak tergoyahkan
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {values.map((value, index) => {
+                const IconComponent = value.icon;
+                return (
+                  <motion.div
+                    key={`value-${index}`}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={{
+                      hidden: { opacity: 0, y: 30 },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: { delay: index * 0.15, duration: 0.8 }
+                      }
+                    }}
+                    className="group"
+                  >
+                    <div className={`bg-gradient-to-br ${value.bgGradient} p-8 rounded-2xl border-2 ${value.borderColor} hover:border-bara-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 h-full`}>
+                      <div className="mb-6">
+                        <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                          <IconComponent className={`w-8 h-8 ${value.color}`} />
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-4">
+                        {value.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {value.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* Stats Section */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={ANIMATION_VARIANTS.stagger}
+            className="mb-24"
+          >
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 text-bara-600 font-semibold mb-4">
+                <TrendingUp className="w-5 h-5" />
+                <span>Pencapaian Kami</span>
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Perjalanan yang{' '}
+                <span className="bg-gradient-to-r from-bara-600 to-red-600 bg-clip-text text-transparent">
+                  Bermakna
+                </span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat, index) => {
                 const IconComponent = stat.icon;
                 return (
                   <motion.div
-                    key={`stat-${index}-${stat.label}`}
+                    key={`stat-${index}`}
                     variants={{
                       hidden: { opacity: 0, y: 30 },
                       visible: {
@@ -393,34 +458,77 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                     }}
                     className="text-center group"
                   >
-                    <Card className="p-6 sm:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 shadow-lg">
-                      <CardContent className="p-0">
-                        <div className={cn(
-                          'w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center',
-                          'bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-eco-50 group-hover:to-eco-100',
-                          'transition-all duration-300 shadow-sm group-hover:shadow-md'
-                        )} aria-hidden="true">
-                          <IconComponent className={cn('w-8 h-8', stat.color)} />
-                        </div>
-                        <p className={cn('text-3xl sm:text-4xl font-bold mb-3', stat.color)} aria-label={`${stat.value}${stat.suffix} ${stat.label}`}>
-                          <CountUp end={stat.value} duration={2.5} />
-                          {stat.suffix}
-                        </p>
-                        <p className="text-sm sm:text-base font-semibold text-gray-900 mb-2">{stat.label}</p>
-                        {stat.description && (
-                          <p className="text-xs sm:text-sm text-gray-600">{stat.description}</p>
-                        )}
-                      </CardContent>
-                    </Card>
+                    <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                      <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br ${stat.bgColor} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}>
+                        <IconComponent className={`w-10 h-10 ${stat.color}`} />
+                      </div>
+                      <div className={`text-4xl font-bold mb-3 ${stat.color}`}>
+                        <CountUp end={stat.value} duration={2.5} suffix={stat.suffix} />
+                      </div>
+                      <div className="font-semibold text-gray-900 mb-2">{stat.label}</div>
+                      <div className="text-sm text-gray-600">{stat.description}</div>
+                    </div>
                   </motion.div>
                 );
               })}
-            </motion.div>
-          )}
+            </div>
+          </motion.div>
+
+          {/* Vision & Mission */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={ANIMATION_VARIANTS.fadeIn}
+            className="mb-24"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <motion.div
+                variants={ANIMATION_VARIANTS.slideInLeft}
+                className="bg-gradient-to-br from-bara-50 to-red-50 p-10 rounded-3xl shadow-lg border border-bara-100"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-bara-500 rounded-xl flex items-center justify-center mr-4">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Visi Kami</h3>
+                </div>
+                <p className="text-gray-700 leading-relaxed text-lg">
+                  Menjadi produsen arang briket terpercaya di Brebes yang dikenal karena 
+                  kualitas premium, inovasi berkelanjutan, dan pelayanan yang memuaskan pelanggan.
+                </p>
+              </motion.div>
+              
+              <motion.div
+                variants={ANIMATION_VARIANTS.slideInRight}
+                className="bg-gradient-to-br from-green-50 to-emerald-50 p-10 rounded-3xl shadow-lg border border-green-100"
+              >
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-4">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Misi Kami</h3>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    'Menghasilkan arang briket berkualitas premium dengan harga terjangkau',
+                    'Memberikan pelayanan personal dan responsif kepada setiap pelanggan',
+                    'Menerapkan proses produksi yang ramah lingkungan dan berkelanjutan',
+                    'Menjadi mitra terpercaya untuk kebutuhan energi alternatif di Brebes'
+                  ].map((mission, index) => (
+                    <div key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">{mission}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </ErrorBoundary>
   );
 };
 
-export default React.memo(AboutSection);
+export default AboutSection;

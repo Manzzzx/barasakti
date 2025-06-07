@@ -3,6 +3,7 @@
 import React, { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowUp, Phone, Mail, MapPin, Instagram, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -69,6 +70,8 @@ const SOCIAL_ICON_MAP = {
 } as const;
 
 const Footer: React.FC<FooterProps> = ({ className = '' }) => {
+  const pathname = usePathname();
+  
   // Type-safe company info with proper fallbacks
   const safeCompanyInfo = useMemo(() => {
     const info = COMPANY_INFO as CompanyInfo | undefined;
@@ -89,7 +92,28 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
     };
   }, []);
 
-  // Memoized footer sections with proper error handling
+  // Function to get section href for footer navigation
+  const getFooterSectionHref = useCallback((item: NavigationItem): string => {
+    if (pathname !== '/') {
+      return item.href;
+    }
+
+    // For home page, convert to section anchors
+    switch (item.href) {
+      case '/':
+        return '#hero';
+      case '/tentang':
+        return '#tentang';
+      case '/gallery':
+        return '#galeri';
+      case '/kontak':
+        return '#kontak';
+      default:
+        return item.href;
+    }
+  }, [pathname]);
+
+  // Memoized footer sections with proper error handling and section links
   const footerSections = useMemo((): FooterSection[] => {
     const safeNavigationItems = Array.isArray(NAVIGATION_ITEMS) 
       ? (NAVIGATION_ITEMS as NavigationItem[]).filter(item => item && typeof item === 'object')
@@ -100,25 +124,25 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         title: 'Navigasi',
         links: safeNavigationItems.map((item: NavigationItem) => ({
           label: item.label || 'Tidak tersedia',
-          href: item.href || '#'
+          href: getFooterSectionHref(item)
         }))
       },
       {
         title: 'Perusahaan',
         links: [
-          { label: 'Tentang Kami', href: '/tentang' },
+          { label: 'Tentang Kami', href: pathname === '/' ? '#tentang' : '/tentang' },
           { label: 'Blog', href: '/blog' },
         ]
       },
       {
         title: 'Dukungan',
         links: [
-          { label: 'Hubungi Kami', href: '/kontak' },
+          { label: 'Hubungi Kami', href: pathname === '/' ? '#kontak' : '/kontak' },
           { label: 'FAQ', href: '/faq' },
         ]
       }
     ];
-  }, []);
+  }, [getFooterSectionHref, pathname]);
 
   // Safe social media links with proper validation
   const socialLinks = useMemo(() => {
