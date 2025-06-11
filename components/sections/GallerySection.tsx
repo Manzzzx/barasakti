@@ -417,20 +417,6 @@ const GallerySection: React.FC<GallerySectionProps> = ({
             </p>
           </div>
         )}
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-gray-600 mb-6 mobile-text">
-              Tertarik dengan produk kami? Hubungi kami untuk informasi lebih lanjut.
-            </p>
-          </motion.div>
-        </div>
       </div>
     </section>
   );

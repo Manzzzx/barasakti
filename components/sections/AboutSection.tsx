@@ -164,7 +164,7 @@ const AboutSection: React.FC = () => {
     },
     {
       icon: Users,
-      value: 50,
+      value: 20,
       suffix: '+',
       label: 'Pelanggan Happy',
       description: 'Dan terus bertambah',

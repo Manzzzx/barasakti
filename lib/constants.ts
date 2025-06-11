@@ -27,7 +27,7 @@ export const COMPANY_INFO: CompanyInfo = {
   contact: {
     phone: '+62 831-9244-3183',
     whatsapp: '+62 831-9244-3183',
-    email: 'barasakti.brebes@gmail.com'
+    email: 'briketarangp2mw@gmail.com'
   },
   social: [
     {
@@ -38,7 +38,7 @@ export const COMPANY_INFO: CompanyInfo = {
     },
     {
       platform: 'Instagram',
-      url: 'https://instagram.com/barasakti.official',
+      url: 'https://instagram.com/bara.sakti.official',
       icon: 'Instagram',
       label: 'Follow us on Instagram'
     },
@@ -90,7 +90,7 @@ export const SEO_DEFAULTS = {
     'charcoal briquette'
   ],
   image: '/images/og-image.jpg',
-  url: 'https://barasakti.com',
+  url: 'https://barasakti.vercel.app',
   type: 'website' as const
 };
 
@@ -111,7 +111,7 @@ export const CONTACT_PREFERENCES = [
 export const SOSIAL_LINKS: SocialLink[] = [
   {
     platform: 'Instagram',
-    url: 'https://instagram.com/barasakti',
+    url: 'https://instagram.com/bara.sakti.official',
     icon: 'Instagram',
     label: 'Follow us on Instagram'
   },

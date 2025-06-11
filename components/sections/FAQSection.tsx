@@ -280,7 +280,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ className = '' }) => {
               <Button 
                 size="lg" 
                 variant="outline"
-                onClick={() => window.location.href = '/kontak'}
+                onClick={() => window.location.href = '/#kontak'}
               >
                 Halaman Kontak
               </Button>
